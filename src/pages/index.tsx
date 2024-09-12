@@ -1,12 +1,15 @@
-// src/pages/index.tsx
-import React from "react";
+import LogoutButton from "../components/LogoutButton";
+import Hero from "../components/Hero";
+import NewArrivals from "../components/NewArrivals";
+import TrendingItems from "../components/TrendingItems";
 
-const HomePage = () => {
+const HomePage = ({ user }: { user: any }) => {
   return (
-    <div>
-      <h1>Welcome to SwiftCart</h1>
-      <p>Your e-commerce platform is up and running!</p>
-    </div>
+    <>
+      <Hero />
+      <NewArrivals />
+      <TrendingItems />
+    </>
   );
 };
 
