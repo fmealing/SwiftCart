@@ -2,10 +2,12 @@ import ProductCard from "./ProductCard";
 
 const NewArrivals = () => {
   return (
-    <section className="bg-amber-100 py-48">
+    <section className="bg-amber-100 py-40">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-6">New Arrivals</h2>
-        <p className="text-lg text-center mb-10">
+        <h2 className="font-lora text-3xl font-bold text-center mb-6">
+          New Arrivals
+        </h2>
+        <p className="font-inter text-lg text-center mb-10">
           Discover the Latest Trends and Fresh Arrivals
         </p>
 

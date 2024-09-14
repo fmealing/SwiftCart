@@ -71,4 +71,12 @@ body {
     background-size: cover;
     background-position: center;
   }
+
+  // Onbaording-1 Background
+  .bg-onboarding-1 {
+    background-image: linear-gradient(to bottom, #b45309c7, #d9770680),
+      url("/images/onboarding-1.jpg");
+    background-size: cover;
+    background-position: center;
+  }
 }

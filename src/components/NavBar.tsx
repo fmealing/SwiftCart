@@ -1,8 +1,8 @@
-// src/components/Navbar.tsx
 import {
   faHeart,
   faShoppingCart,
   faUser,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -25,19 +25,25 @@ const Navbar = () => {
 
           {/* Search Bar */}
           <div className="flex items-center space-x-4">
-            <input
-              type="text"
-              placeholder="Search"
-              className="px-4 py-2 w-80 border rounded-md border-gray-300"
-            />
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search"
+                className="px-4 py-2 w-80 border rounded-md border-gray-300 font-inter pl-10" // Add padding-left for the icon
+              />
+              <FontAwesomeIcon
+                icon={faSearch}
+                className="absolute left-3 top-3 text-gray-500"
+              />
+            </div>
           </div>
 
-          {/* Profile Link*/}
+          {/* Profile Link */}
           <div className="flex space-x-6 items-center">
             <Link href="/profile" className="text-gray-800">
               <div className="gap-2 flex items-center justify-center">
                 <FontAwesomeIcon icon={faUser} className="text-amber-600" />
-                <p>Profile</p>
+                <p className="font-inter">Profile</p>
               </div>
             </Link>
 
@@ -45,7 +51,7 @@ const Navbar = () => {
             <Link href="/wishlist" className="text-gray-800">
               <div className="gap-2 flex items-center justify-center">
                 <FontAwesomeIcon icon={faHeart} className="text-amber-600" />
-                <p>Wishlist</p>
+                <p className="font-inter">Wishlist</p>
               </div>
             </Link>
 
@@ -56,7 +62,7 @@ const Navbar = () => {
                   icon={faShoppingCart}
                   className="text-amber-600"
                 />
-                <p>Cart</p>
+                <p className="font-inter">Cart</p>
               </div>
             </Link>
           </div>

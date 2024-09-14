@@ -25,8 +25,10 @@ const ProductCard = ({ name, price, image }: ProductCardProps) => {
       {/* Product Info */}
       <div className="flex justify-between items-center mt-4">
         <div>
-          <h3 className="text-xl font-semibold text-amber-700">{name}</h3>
-          <p className="text-amber-600">{price}</p>
+          <h3 className="text-xl font-semibold text-amber-700 font-inter">
+            {name}
+          </h3>
+          <p className="text-amber-600 font-inter">{price}</p>
         </div>
 
         {/* Cart Icon with Hover Effect */}
