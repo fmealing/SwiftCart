@@ -1,5 +1,12 @@
 import Image from "next/image";
 import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faGamepad,
+  faBook,
+  faTshirt,
+  faMusic,
+} from "@fortawesome/free-solid-svg-icons";
 
 // Define the type for userDetails
 interface UserDetails {
@@ -74,22 +81,31 @@ const OnboardingTwo: React.FC<OnboardingTwoProps> = ({
           <div className="space-y-4">
             <h2 className="text-lg font-semibold">Choose your theme</h2>
             <div className="flex space-x-4">
-              {["System", "Light", "Dark"].map((theme) => (
+              {[
+                { name: "System", color: "#4B5563", textColor: "text-white" }, // Gray for system, white text
+                { name: "Light", color: "#F9FAFB", textColor: "text-black" }, // Light gray for light theme, black text
+                { name: "Dark", color: "#111827", textColor: "text-white" }, // Dark gray for dark theme, white text
+              ].map((theme) => (
                 <button
-                  key={theme}
-                  onClick={() => setUserDetails({ ...userDetails, theme })}
-                  className={`w-20 h-20 p-4 border rounded-lg ${
-                    userDetails.theme === theme.toLowerCase()
+                  key={theme.name}
+                  onClick={() =>
+                    setUserDetails({
+                      ...userDetails,
+                      theme: theme.name.toLowerCase(),
+                    })
+                  }
+                  className={`w-24 h-24 border rounded-lg flex items-center justify-center ${
+                    userDetails.theme === theme.name.toLowerCase()
                       ? "border-blue-500"
                       : "border-gray-300"
                   }`}
+                  style={{ backgroundColor: theme.color }}
                 >
-                  <img
-                    src={`/images/${theme.toLowerCase()}-icon.jpg`}
-                    alt={theme}
-                    className="w-full h-full object-contain"
-                  />
-                  <p className="text-center text-sm">{theme}</p>
+                  <p
+                    className={`font-inter text-lg text-center ${theme.textColor}`}
+                  >
+                    {theme.name}
+                  </p>
                 </button>
               ))}
             </div>
@@ -99,29 +115,30 @@ const OnboardingTwo: React.FC<OnboardingTwoProps> = ({
           <div className="space-y-4">
             <h2 className="text-lg font-semibold">Choose your interests</h2>
             <div className="flex space-x-4">
-              {["Gaming", "Reading", "Fashion", "Music"].map((interest) => (
+              {[
+                { name: "Gaming", icon: faGamepad },
+                { name: "Reading", icon: faBook },
+                { name: "Fashion", icon: faTshirt },
+                { name: "Music", icon: faMusic },
+              ].map((interest) => (
                 <button
-                  key={interest}
+                  key={interest.name}
                   onClick={() =>
                     setUserDetails((prev: UserDetails) => ({
                       ...prev,
-                      interests: prev.interests.includes(interest)
-                        ? prev.interests.filter((i) => i !== interest)
-                        : [...prev.interests, interest],
+                      interests: prev.interests.includes(interest.name)
+                        ? prev.interests.filter((i) => i !== interest.name)
+                        : [...prev.interests, interest.name],
                     }))
                   }
-                  className={`w-20 h-20 p-4 border rounded-lg ${
-                    userDetails.interests.includes(interest)
-                      ? "border-blue-500"
-                      : "border-gray-300"
+                  className={`w-24 h-24 p-4 border rounded-lg flex flex-col items-center justify-center bg-amber-200 ${
+                    userDetails.interests.includes(interest.name)
+                      ? "bg-amber-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-amber-100"
                   }`}
                 >
-                  <img
-                    src={`/images/${interest.toLowerCase()}-icon.png`}
-                    alt={interest}
-                    className="w-full h-full object-contain"
-                  />
-                  <p className="text-center text-sm">{interest}</p>
+                  <FontAwesomeIcon icon={interest.icon} className="text-2xl" />
+                  <p className="text-center text-sm mt-2">{interest.name}</p>
                 </button>
               ))}
             </div>
@@ -129,7 +146,7 @@ const OnboardingTwo: React.FC<OnboardingTwoProps> = ({
 
           {/* Continue Button */}
           <button
-            className="w-full py-2 bg-black text-white font-semibold rounded-lg"
+            className="w-1/2 py-2 bg-black text-white font-semibold rounded-lg"
             onClick={nextStep}
           >
             Continue
@@ -142,9 +159,10 @@ const OnboardingTwo: React.FC<OnboardingTwoProps> = ({
         <Image
           src={previewImage || "/images/onboarding-2.jpg"}
           alt="Profile Preview"
-          width={800}
-          height={1200}
+          layout="fill"
+          objectFit="cover"
         />
+        <div className="absolute inset-0 bg-amber-500 opacity-30"></div>
         <div className="absolute inset-0 flex items-center justify-center text-white text-5xl font-bold">
           Almost there!
         </div>

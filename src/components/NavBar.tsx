@@ -9,8 +9,8 @@ import Link from "next/link";
 
 const Navbar = () => {
   return (
-    <nav className="bg-white shadow-lg">
-      <div className="container mx-auto px-4">
+    <nav className="bg-amber-50 shadow-l">
+      <div className="container mx-auto px-4 ">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <div>
@@ -68,6 +68,9 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {/* Horizontal row to separate navigation from the rest */}
+      <hr className="border-t border-gray-200" />
     </nav>
   );
 };
