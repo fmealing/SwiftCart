@@ -43,23 +43,27 @@ const OnboardingOne: React.FC<OnboardingOneProps> = ({
       {/* Left side - Form */}
       <div className="w-1/2 flex items-center justify-center bg-white p-8">
         <div className="max-w-md w-full">
-          <h1 className="font-lora text-[40px] font-semibold">
+          <h1 className="font-lora text-[40px] font-semibold text-center">
             Get Started Now
           </h1>
-          <h3 className="font-lora mb-8 text-lg">
+          <h3 className="font-lora mb-8 text-lg text-center">
             Enter your credentials to access your account
           </h3>
 
           <button
             onClick={handleGoogleLogin}
-            className="w-full py-2 bg-white border border-gray-300 text-gray-500 font-semibold rounded-lg flex items-center justify-center max-w-xs mb-8"
+            className="py-2 bg-white border border-gray-300 text-gray-500 font-semibold rounded-lg flex items-center justify-center w-full mb-8"
           >
-            <img
-              src="/images/google-logo.png"
-              alt="Google"
-              className="h-5 w-5 mr-2"
-            />
-            Sign in with Google
+            <div className="flex items-center justify-center w-full">
+              {" "}
+              {/* Centering the button */}
+              <img
+                src="/images/google-logo.png"
+                alt="Google"
+                className="h-5 w-5 mr-2"
+              />
+              Sign in with Google
+            </div>
           </button>
 
           <div className="flex items-center justify-center my-6">

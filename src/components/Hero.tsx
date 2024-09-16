@@ -3,7 +3,7 @@ import Link from "next/link";
 const Hero = () => {
   return (
     <section className="hero-background text-white">
-      <div className="flex flex-col items-center justify-center h-full bg-black bg-opacity-50">
+      <div className="flex flex-col items-center justify-center h-full bg-black bg-opacity-50 ">
         <h1 className="font-lora text-7xl font-bold mb-4">Minimalist Tech</h1>
 
         <Link href="/auth/signup">
