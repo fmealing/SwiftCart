@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { supabase } from "../../lib/supabase";
+import { createClient } from "@/src/utils/supabase/component";
 
 const ResetPassword = () => {
+  const supabase = createClient();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Send password reset email
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: "http://localhost:3000/auth/update-password", // URL where users can reset their password
     });

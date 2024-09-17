@@ -21,7 +21,8 @@ const OnboardingThree = ({ resetForm }: OnboardingThreeProps) => {
           Sign-up successful!
         </h1>
         <p className="font-inter text-white text-lg">
-          Please check your email to confirm your account.
+          Your account has been created. Please check your email to confirm your
+          account.
         </p>
         <button
           onClick={resetForm}

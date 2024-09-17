@@ -8,14 +8,14 @@ const Cart = () => {
     {
       productImage: "/images/apple-laptop.jpg",
       productName: "MacBook Pro, M3 Max 2024",
-      productPrice: "£2,046.99",
+      productPrice: 2046.99, // Store prices as numbers
       productBrand: "Apple",
       quantity: 1,
     },
     {
       productImage: "/images/record-player.jpg",
       productName: "Debut III Record Player",
-      productPrice: "£185.00",
+      productPrice: 185.0, // Store prices as numbers
       productBrand: "Pro-Ject",
       quantity: 1,
     },
@@ -47,12 +47,17 @@ const Cart = () => {
     );
   };
 
+  // Function to format price using the currency formatter
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+    }).format(value);
+  };
+
+  // Calculate total amount
   const totalAmount = cartItems
-    .reduce(
-      (acc, item) =>
-        acc + parseFloat(item.productPrice.slice(1)) * item.quantity,
-      0
-    )
+    .reduce((acc, item) => acc + item.productPrice * item.quantity, 0)
     .toFixed(2);
 
   return (
@@ -67,7 +72,7 @@ const Cart = () => {
             key={item.productName}
             productImage={item.productImage}
             productName={item.productName}
-            productPrice={item.productPrice}
+            productPrice={formatCurrency(item.productPrice)} // Format price for display
             productBrand={item.productBrand}
             quantity={item.quantity}
             onIncreaseQuantity={() => handleIncreaseQuantity(item.productName)}
@@ -79,10 +84,10 @@ const Cart = () => {
 
       {/* Cart Summary */}
       <CartSummary
-        totalAmount={`£${totalAmount}`}
+        totalAmount={formatCurrency(parseFloat(totalAmount))} // Format total amount
         items={cartItems.map((item) => ({
           name: item.productName,
-          price: item.productPrice,
+          price: formatCurrency(item.productPrice), // Format price for each item
           quantity: item.quantity,
         }))}
       />

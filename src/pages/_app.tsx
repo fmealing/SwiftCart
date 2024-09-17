@@ -1,12 +1,13 @@
 import "../styles/globals.scss";
 import { AppProps } from "next/app";
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
+import { createClient } from "../utils/supabase/component"; // Use component-specific Supabase client
 import { User } from "@supabase/supabase-js";
 import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const supabase = createClient(); // Initialize Supabase client for components
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true); // Add loading state to prevent premature redirects
 
@@ -31,12 +32,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     return () => {
       authListener?.subscription.unsubscribe();
     };
-  }, []);
+  }, [supabase]);
 
   // Pass loading state and user state to all pages
   return (
     <>
-      <Navbar />
+      <Navbar user={user} />
       <Component {...pageProps} user={user} loading={loading} />
       <Footer />
     </>

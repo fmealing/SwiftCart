@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { supabase } from "../../lib/supabase";
+import { createClient } from "@/src/utils/supabase/component";
 import OnboardingOne from "@/src/components/OnboardingOne";
 import OnboardingTwo from "@/src/components/OnboardingTwo";
 import OnboardingThree from "@/src/components/OnboardingThree";
 
 const SignUp = () => {
+  const supabase = createClient();
   const [step, setStep] = useState(1); // Track which onboarding step we're on
   const [userDetails, setUserDetails] = useState({
     email: "",
@@ -28,17 +29,52 @@ const SignUp = () => {
 
   // Sign up the user (called in OnboardingOne)
   const handleSignUp = async () => {
-    const { email, password } = userDetails;
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { email, password, fullName, profilePicture, theme, interests } =
+      userDetails;
 
-    if (error) {
-      setError(error.message);
+    // Step 1: Sign up the user
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp(
+      { email, password }
+    );
+
+    if (signUpError) {
+      setError(signUpError.message);
+      return;
+    }
+
+    // Step 2: If sign-up successful, insert user profile into the database
+    const user = signUpData.user; // Get the signed-up user's data
+
+    // Upload the profile picture if it exists
+    let avatar_url = null;
+    if (profilePicture) {
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("avatars")
+        .upload(`public/${user?.id}/avatar.png`, profilePicture);
+
+      if (uploadError) {
+        setError(uploadError.message);
+        return;
+      }
+      avatar_url = uploadData?.path; // Get the uploaded image URL
+    }
+
+    // Step 3: Insert additional user details into the profiles table
+    const { error: profileError } = await supabase.from("profiles").insert({
+      id: user?.id,
+      full_name: fullName,
+      avatar_url,
+      theme,
+      interests, // Assuming interests is an array
+    });
+
+    if (profileError) {
+      setError(profileError.message);
+      return;
     } else {
-      setError("");
-      alert(
-        "Sign-up successful! Please check your email to confirm your account."
-      );
-      nextStep(); // Proceed to the next step after successful sign-up
+      setError(""); // Clear any previous errors
+      alert("Sign-up successful!"); // Notify the user
+      nextStep(); // Move to the next step after successful sign-up
     }
   };
 

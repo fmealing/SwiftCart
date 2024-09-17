@@ -62,8 +62,8 @@ const OnboardingTwo: React.FC<OnboardingTwoProps> = ({
               <Image
                 src={previewImage || "/images/avatars/Avatar-1.jpg"}
                 alt="Profile Preview"
-                width={16}
-                height={16}
+                width={64}
+                height={64}
                 className="w-16 h-16 rounded-full object-cover"
               />
               <label className="border px-4 py-2 rounded-lg cursor-pointer">
@@ -131,7 +131,7 @@ const OnboardingTwo: React.FC<OnboardingTwoProps> = ({
                         : [...prev.interests, interest.name],
                     }))
                   }
-                  className={`w-24 h-24 p-4 border rounded-lg flex flex-col items-center justify-center bg-amber-200 ${
+                  className={`w-24 h-24 p-4 border rounded-lg flex flex-col items-center justify-center ${
                     userDetails.interests.includes(interest.name)
                       ? "bg-amber-500 text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-amber-100"

@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabase";
+import { supabase } from "../utils/supabase";
 import { useRouter } from "next/router";
 
 const LogoutButton = () => {

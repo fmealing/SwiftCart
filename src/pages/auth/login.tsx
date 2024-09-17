@@ -1,7 +1,11 @@
 import { useState } from "react";
-import { supabase } from "../../lib/supabase";
+import { useRouter } from "next/router";
+import { createClient } from "@/src/utils/supabase/component";
 
 const Login = () => {
+  const supabase = createClient(); // Initialize the Supabase client for components
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -10,7 +14,8 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    // Step 1: Login with email and password
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -19,7 +24,27 @@ const Login = () => {
       setError(error.message);
     } else {
       setError("");
-      alert("Login successful!");
+
+      // Step 2: Fetch the user's profile data after login
+      const user = data.user;
+
+      if (user) {
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
+          .single();
+
+        if (profileError) {
+          console.error("Error fetching user profile:", profileError.message);
+        } else {
+          console.log("User profile:", profile);
+          // Store the profile in local state or global state management
+        }
+
+        // Step 3: Redirect to the homepage after successful login
+        router.push("/");
+      }
     }
   };
 

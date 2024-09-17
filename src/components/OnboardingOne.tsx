@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { supabase } from "../lib/supabase";
+import { createClient } from "../utils/supabase/component";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -21,6 +21,7 @@ const OnboardingOne: React.FC<OnboardingOneProps> = ({
   nextStep,
   error,
 }) => {
+  const supabase = createClient();
   const [showPassword, setShowPassword] = useState(false); // Add state for password visibility
 
   // Function to handle login with Google OAuth

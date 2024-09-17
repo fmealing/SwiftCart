@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { supabase } from "../../lib/supabase";
+import { createClient } from "@/src/utils/supabase/component";
 import { useRouter } from "next/router";
 
 const UpdatePassword = () => {
+  const supabase = createClient();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
