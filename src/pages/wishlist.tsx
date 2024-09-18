@@ -1,39 +1,34 @@
 import React from "react";
 import WishlistItem from "../components/WishlistItem";
+import { useWishlist } from "@/src/context/WishlistContext"; // Import the wishlist context
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { useCart } from "../context/CartContext";
 
 const WishlistPage = () => {
-  // Example data (you can replace this with actual dynamic data later)
-  const wishlistItems = [
-    {
-      productImage: "/images/apple-laptop.jpg",
-      productName: "MacBook Pro, M3 Max 2024",
-      productPrice: "£2,046.99",
-      productBrand: "Apple",
-    },
-    {
-      productImage: "/images/record-player.jpg",
-      productName: "Debut III Record Player",
-      productPrice: "£185.00",
-      productBrand: "Pro-Ject",
-    },
-  ];
+  const { wishlistItems, removeFromWishlist, clearWishlist } = useWishlist();
+  const { addToCart } = useCart();
 
-  const handleAddToCart = (productName: string) => {
-    console.log(`Adding ${productName} to cart`);
-  };
-
-  const handleBuyNow = (productName: string) => {
-    console.log(`Buying ${productName} now`);
-  };
-
-  const handleRemove = (productName: string) => {
-    console.log(`Removing ${productName} from wishlist`);
+  const handleRemove = (id: string) => {
+    removeFromWishlist(id);
   };
 
   const handleAddAllToCart = () => {
-    console.log("Adding all items to cart");
+    // First, add all items from wishlist to cart
+    wishlistItems.forEach((item) => {
+      const productToAdd = {
+        id: item.id,
+        productName: item.productName,
+        productPrice: item.productPrice,
+        productImage: item.productImage,
+        productBrand: item.productBrand,
+        quantity: 1, // Default quantity
+      };
+      addToCart(productToAdd); // Add item to cart
+    });
+
+    // After adding all items to cart, clear the wishlist
+    clearWishlist();
   };
 
   return (
@@ -45,14 +40,13 @@ const WishlistPage = () => {
       <div>
         {wishlistItems.map((item) => (
           <WishlistItem
-            key={item.productName}
+            key={item.id}
+            id={item.id}
             productImage={item.productImage}
             productName={item.productName}
-            productPrice={item.productPrice}
+            productPrice={item.productPrice} // Format price for display
             productBrand={item.productBrand}
-            onAddToCart={() => handleAddToCart(item.productName)}
-            onBuyNow={() => handleBuyNow(item.productName)}
-            onRemove={() => handleRemove(item.productName)}
+            onRemove={() => handleRemove(item.id)}
           />
         ))}
       </div>

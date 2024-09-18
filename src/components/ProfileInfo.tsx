@@ -5,7 +5,7 @@ interface ProfileInfoProps {
   aboutMe: string;
   profileImage: string;
   onSave: (name: string, about: string) => void;
-  onChangePicture: () => void;
+  onChangePicture: (file: File | null) => void; // Updated to pass file for image upload
   onDeletePicture: () => void;
 }
 
@@ -24,22 +24,29 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
     onSave(name, about);
   };
 
+  const handlePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null; // Get the first selected file
+    onChangePicture(file); // Pass the file to the parent component
+  };
+
   return (
     <div className="flex flex-col space-x-6">
       {/* Profile Image */}
       <div className="flex gap-8 text-center p-8">
         <img
           src={profileImage}
-          alt="Profile"
+          alt="Profile, default avatar Designed by Freepik"
           className="w-28 h-28 rounded-full object-cover"
         />
         <div className="mt-4 flex space-x-2">
-          <button
-            onClick={onChangePicture}
-            className="px-4 py-2 bg-black text-white rounded-lg h-14 hover:bg-amber-700 transition-all duration-200"
-          >
+          <label className="px-4 py-2 bg-black text-white rounded-lg h-14 hover:bg-amber-700 transition-all duration-200 cursor-pointer">
             Change picture
-          </button>
+            <input
+              type="file"
+              className="hidden"
+              onChange={handlePictureChange} // Trigger file input on change
+            />
+          </label>
           <button
             onClick={onDeletePicture}
             className="px-4 py-2 bg-red-500 text-white rounded-lg h-14 hover:bg-red-700 transition-all duration-200"

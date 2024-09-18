@@ -5,6 +5,8 @@ import { createClient } from "../utils/supabase/component"; // Use component-spe
 import { User } from "@supabase/supabase-js";
 import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
+import { CartProvider } from "../context/CartContext";
+import { WishlistProvider } from "../context/WishlistContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const supabase = createClient(); // Initialize Supabase client for components
@@ -36,11 +38,13 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   // Pass loading state and user state to all pages
   return (
-    <>
-      <Navbar user={user} />
-      <Component {...pageProps} user={user} loading={loading} />
-      <Footer />
-    </>
+    <CartProvider>
+      <WishlistProvider>
+        <Navbar user={user} />
+        <Component {...pageProps} user={user} loading={loading} />
+        <Footer />
+      </WishlistProvider>
+    </CartProvider>
   );
 }
 

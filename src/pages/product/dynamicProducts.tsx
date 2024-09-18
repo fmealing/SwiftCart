@@ -1,3 +1,10 @@
+// After changing the table structure on supabase none of this works anymore.
+// My guess is that I wasn't consistent with the variable names so I'll just have to compare
+// Same goes with the reviews - I just have to compare the variable names and adjust them accordingly
+
+// Update - works again
+// Cba for GitHub
+
 import {
   faBattery,
   faCamera,
@@ -58,7 +65,7 @@ const ProductPage = () => {
             )
           `
           )
-          .eq("id", 1); // Fetch product with id=1
+          .eq("id", 3); // Fetch product with id=3
         if (error) {
           console.error("Supabase error:", error);
           return;

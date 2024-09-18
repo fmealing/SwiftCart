@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "../utils/supabase/component";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,7 +8,6 @@ interface OnboardingOneProps {
   userDetails: {
     email: string;
     password: string;
-    fullName: string;
   };
   setUserDetails: React.Dispatch<React.SetStateAction<any>>;
   nextStep: () => void;
@@ -22,80 +21,50 @@ const OnboardingOne: React.FC<OnboardingOneProps> = ({
   error,
 }) => {
   const supabase = createClient();
-  const [showPassword, setShowPassword] = useState(false); // Add state for password visibility
-
-  // Function to handle login with Google OAuth
-  const handleGoogleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
-
-    if (error) {
-      console.error("Google sign-in error:", error.message);
-    }
-  };
+  const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+  useEffect(() => {
+    const checkUserSession = async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        console.error(
+          "Error fetching user or user not authenticated:",
+          error?.message
+        );
+        // Redirect user or ask them to verify email if necessary
+        // alert("Please verify your email or log in to continue.");
+      }
+    };
+
+    checkUserSession();
+  }, []);
+
   return (
     <div className="flex min-h-screen">
-      {/* Left side - Form */}
       <div className="w-1/2 flex items-center justify-center bg-white p-8">
         <div className="max-w-md w-full">
           <h1 className="font-lora text-[40px] font-semibold text-center">
             Get Started Now
           </h1>
           <h3 className="font-lora mb-8 text-lg text-center">
-            Enter your credentials to access your account
+            Enter your credentials to create your account
           </h3>
 
-          <button
-            onClick={handleGoogleLogin}
-            className="py-2 bg-white border border-gray-300 text-gray-500 font-semibold rounded-lg flex items-center justify-center w-full mb-8"
-          >
-            <div className="flex items-center justify-center w-full">
-              {" "}
-              {/* Centering the button */}
-              <img
-                src="/images/google-logo.png"
-                alt="Google"
-                className="h-5 w-5 mr-2"
-              />
-              Sign in with Google
-            </div>
-          </button>
-
-          <div className="flex items-center justify-center my-6">
-            <hr className="flex-grow border-gray-300" />
-            <span className="px-4 text-gray-500 whitespace-nowrap ">
-              or Sign in with Email
-            </span>
-            <hr className="flex-grow border-gray-300" />
-          </div>
-
+          {/* Email & Password Sign Up Form */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              nextStep();
+              nextStep(); // Proceed to next step after successful sign-up
             }}
           >
-            {/* Full Name Input */}
-            <div>
-              <p className="font-inter px-2">Full Name</p>
-              <input
-                type="text"
-                placeholder="John Doe"
-                value={userDetails.fullName}
-                onChange={(e) =>
-                  setUserDetails({ ...userDetails, fullName: e.target.value })
-                }
-                className="font-inter w-full mb-4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-              />
-            </div>
-
-            {/* Email Input */}
             <div>
               <p className="font-inter px-2">Email</p>
               <input
@@ -106,10 +75,10 @@ const OnboardingOne: React.FC<OnboardingOneProps> = ({
                   setUserDetails({ ...userDetails, email: e.target.value })
                 }
                 className="w-full mb-4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+                required
               />
             </div>
 
-            {/* Password Input */}
             <div>
               <div className="w-full flex justify-between mb-2">
                 <p className="font-inter px-2 text-slate-900">Password</p>
@@ -126,6 +95,7 @@ const OnboardingOne: React.FC<OnboardingOneProps> = ({
                     setUserDetails({ ...userDetails, password: e.target.value })
                   }
                   className="w-full mb-4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  required
                 />
                 <span
                   className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
@@ -139,26 +109,14 @@ const OnboardingOne: React.FC<OnboardingOneProps> = ({
               </div>
             </div>
 
-            {/* Terms and conditions */}
-            <label className="flex items-center mb-4">
-              <input type="checkbox" className="form-checkbox text-amber-500" />
-              <span className="ml-2 text-base text-slate-900">
-                I agree to the
-                <Link href="/terms" className="ml-2 text-base text-amber-500">
-                  terms and conditions
-                </Link>
-              </span>
-            </label>
-
-            {/* Error message */}
+            {/* Error Message */}
             {error && <p className="text-red-500 mb-4">{error}</p>}
 
-            {/* Submit Button */}
             <button
               type="submit"
               className="w-full py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition"
             >
-              Sign Up
+              Continue
             </button>
           </form>
         </div>

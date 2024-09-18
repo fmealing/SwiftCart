@@ -1,3 +1,14 @@
+// Has been improving
+// User can now sign-up with email and password and get a confirmation email
+// The issue is that the user needs to first con firm their email before they can login
+// Once they have confirmed their email, they can login
+// Makes the rest of the Onbarding pointless, so the rest of the process should be on the profile page
+// For now the idea is to have the user sign up, get a success page that tells them to confirm their email
+// and then they can set their preferences on the profile page
+// This makes the process soooooooo much easier, as a freshly registered user never has to enter their preferences
+
+// Works really well now
+
 import { useState } from "react";
 import { createClient } from "@/src/utils/supabase/component";
 import OnboardingOne from "@/src/components/OnboardingOne";
@@ -6,115 +17,48 @@ import OnboardingThree from "@/src/components/OnboardingThree";
 
 const SignUp = () => {
   const supabase = createClient();
-  const [step, setStep] = useState(1); // Track which onboarding step we're on
+  const [step, setStep] = useState(1);
   const [userDetails, setUserDetails] = useState({
     email: "",
     password: "",
-    fullName: "",
     profilePicture: null,
-    theme: "system", // Default theme
+    theme: "system",
     interests: [],
   });
   const [error, setError] = useState("");
 
-  // Move to the next onboarding step
-  const nextStep = () => {
-    setStep(step + 1);
-  };
+  // Move to the next step
+  const nextStep = () => setStep(step + 1);
 
   // Go back to the previous step
-  const prevStep = () => {
-    setStep(step - 1);
-  };
+  const prevStep = () => setStep(step - 1);
 
-  // Sign up the user (called in OnboardingOne)
+  // Sign up the user during OnboardingOne
   const handleSignUp = async () => {
-    const { email, password, fullName, profilePicture, theme, interests } =
-      userDetails;
+    const { email, password } = userDetails;
 
-    // Step 1: Sign up the user
-    const { data: signUpData, error: signUpError } = await supabase.auth.signUp(
-      { email, password }
-    );
+    const { data, error } = await supabase.auth.signUp({ email, password });
 
-    if (signUpError) {
-      setError(signUpError.message);
-      return;
-    }
-
-    // Step 2: If sign-up successful, insert user profile into the database
-    const user = signUpData.user; // Get the signed-up user's data
-
-    // Upload the profile picture if it exists
-    let avatar_url = null;
-    if (profilePicture) {
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(`public/${user?.id}/avatar.png`, profilePicture);
-
-      if (uploadError) {
-        setError(uploadError.message);
-        return;
-      }
-      avatar_url = uploadData?.path; // Get the uploaded image URL
-    }
-
-    // Step 3: Insert additional user details into the profiles table
-    const { error: profileError } = await supabase.from("profiles").insert({
-      id: user?.id,
-      full_name: fullName,
-      avatar_url,
-      theme,
-      interests, // Assuming interests is an array
-    });
-
-    if (profileError) {
-      setError(profileError.message);
-      return;
+    if (error) {
+      setError(error.message);
     } else {
-      setError(""); // Clear any previous errors
-      alert("Sign-up successful!"); // Notify the user
-      nextStep(); // Move to the next step after successful sign-up
+      setError("");
+      nextStep(); // Proceed to OnboardingTwo after successful sign-up
     }
   };
 
-  // Reset the form and return to step 1
-  const resetForm = () => {
-    setUserDetails({
-      email: "",
-      password: "",
-      fullName: "",
-      profilePicture: null,
-      theme: "system",
-      interests: [],
-    });
-    setStep(1);
-  };
-
-  // Conditional rendering based on the current step
+  // Conditional rendering of the steps
   return (
     <div>
       {step === 1 && (
         <OnboardingOne
           userDetails={userDetails}
           setUserDetails={setUserDetails}
-          nextStep={handleSignUp} // Call sign-up before proceeding
+          nextStep={handleSignUp}
           error={error}
         />
       )}
-      {step === 2 && (
-        <OnboardingTwo
-          userDetails={userDetails}
-          setUserDetails={setUserDetails}
-          nextStep={nextStep}
-          prevStep={prevStep}
-        />
-      )}
-      {step === 3 && (
-        <OnboardingThree
-          resetForm={resetForm} // Reset after completion
-        />
-      )}
+      {step === 2 && <OnboardingTwo resetForm={() => setStep(1)} />}
     </div>
   );
 };
