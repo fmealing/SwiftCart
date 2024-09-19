@@ -2,77 +2,78 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingBag } from "@fortawesome/free-solid-svg-icons";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
+import { toast } from "react-toastify";
+
 interface ProductCardProps {
   name: string;
-  price: number; // Use number for price
+  price: number;
   image: string;
-  brand: string; // Add brand prop
+  brand: string;
 }
 
 const ProductCard = ({ name, price, image, brand }: ProductCardProps) => {
-  const { addToCart } = useCart(); // Destructure the addToCart function from the context
+  const { addToCart } = useCart();
   const { addToWishlist } = useWishlist();
 
   const handleAddToWishlist = () => {
     const productToAdd = {
-      id: `${name}-${price}`, // Unique ID (you can use a product ID if available)
+      id: `${name}-${price}`, // Generate a unique ID
       productName: name,
       productPrice: price,
       productImage: image,
-      productBrand: brand, // Use the actual brand here
+      productBrand: brand,
     };
 
-    addToWishlist(productToAdd); // Add the product to the wishlist using the context
+    addToWishlist(productToAdd);
 
-    alert("Product added to wishlist!"); // Show an alert for demonstration'
-    // TODO: show a toast notification
+    // Show a tast notification
+    toast.success(`${name} added to your wishlist!`, {
+      position: "top-right",
+      autoClose: 2000,
+    });
   };
 
   const handleAddToCart = () => {
     const productToAdd = {
-      id: `${name}-${price}`, // Unique ID (you can use a product ID if available)
+      id: `${name}-${price}`, // Generate a unique ID
       productName: name,
       productPrice: price,
       productImage: image,
-      productBrand: brand, // Use the actual brand here
+      productBrand: brand,
       quantity: 1,
     };
 
-    addToCart(productToAdd); // Add the product to the cart using the context
+    addToCart(productToAdd);
 
-    alert("Product added to cart!"); // Show an alert for demonstration
-    // TODO: show a toast notification
+    // Show a toast notification
+    toast.success(`${name} added to your cart!`, {
+      position: "top-right",
+      autoClose: 2000,
+    });
   };
 
   return (
-    <div className="relative bg-amber-50 p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
-      {/* Heart Icon (top-right corner) */}
+    <div className="relative bg-white p-6 rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105 hover:shadow-2xl">
       <button
         onClick={handleAddToWishlist}
-        className="absolute top-8 right-8 text-grey-500 hover:text-red-500"
+        className="absolute top-8 right-8 text-gray-500 hover:text-red-500 transition duration-300"
       >
         <FontAwesomeIcon icon={faHeart} size="2xl" />
       </button>
 
-      {/* Product Image */}
       <img
         src={image}
         alt={name}
-        className="w-full h-96 object-cover mb-4 rounded-lg"
+        className="w-full h-64 object-cover mb-4 rounded-lg"
       />
 
-      {/* Product Info */}
       <div className="flex justify-between items-center mt-4">
         <div>
-          <h3 className="text-xl font-semibold text-amber-700 font-inter">
-            {name}
-          </h3>
-          <p className="text-amber-600 font-inter">£{price.toFixed(2)}</p>
-          <p className="text-gray-600 font-inter">{brand}</p>{" "}
-          {/* Display brand here */}
+          <h3 className="text-xl font-bold text-gray-800">{name}</h3>
+          <p className="text-gray-600">£{price.toFixed(2)}</p>
+          <p className="text-gray-500">{brand}</p>
         </div>
 
-        {/* Cart Icon with Hover Effect */}
         <button
           onClick={handleAddToCart}
           className="text-amber-500 hover:text-blue-500 transform transition-transform duration-300 hover:scale-125"

@@ -4,8 +4,6 @@ import {
   faArrowRightFromBracket,
   faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
-import { useCart } from "../context/CartContext";
-import { useWishlist } from "../context/WishlistContext";
 
 interface WishlistItemProps {
   id: string;
@@ -19,7 +17,6 @@ interface WishlistItemProps {
 }
 
 const WishlistItem: React.FC<WishlistItemProps> = ({
-  id,
   productImage,
   productName,
   productPrice,
@@ -28,25 +25,15 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
   onBuyNow,
   onRemove,
 }) => {
-  const { addToCart } = useCart();
-  const { removeFromWishlist } = useWishlist();
-
-  const handleAddToCart = () => {
-    const productToAdd = {
-      id,
-      productName,
-      productPrice,
-      productImage,
-      productBrand,
-      quantity: 1,
-    };
-
-    addToCart(productToAdd);
-    removeFromWishlist(id);
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+    }).format(value);
   };
 
   return (
-    <div className="flex items-center justify-between py-4 border-b">
+    <div className="bg-white shadow-lg rounded-lg p-4 mb-4 flex items-center justify-between">
       <div className="flex items-center space-x-4">
         <img
           src={productImage}
@@ -68,13 +55,13 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
       </div>
 
       <p className="font-inter text-amber-900 text-xl font-semibold">
-        £{productPrice.toFixed(2)}
+        {formatCurrency(productPrice)}
       </p>
 
       <div className="flex flex-col space-y-2">
         <button
-          onClick={handleAddToCart}
-          className="px-4 py-2 text-lg bg-amber-600 text-white rounded-lg hover:bg-gray-700"
+          onClick={onAddToCart}
+          className="px-4 py-2 text-lg bg-amber-600 text-white rounded-lg hover:bg-amber-700"
         >
           <div className="flex gap-2 items-center">
             <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />

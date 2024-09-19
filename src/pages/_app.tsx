@@ -7,6 +7,9 @@ import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { CartProvider } from "../context/CartContext";
 import { WishlistProvider } from "../context/WishlistContext";
+import { SearchProvider } from "../context/SearchContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const supabase = createClient(); // Initialize Supabase client for components
@@ -40,9 +43,22 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <CartProvider>
       <WishlistProvider>
-        <Navbar user={user} />
-        <Component {...pageProps} user={user} loading={loading} />
-        <Footer />
+        <SearchProvider>
+          <Navbar user={user} />
+          <Component {...pageProps} user={user} loading={loading} />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+          <Footer />
+        </SearchProvider>
       </WishlistProvider>
     </CartProvider>
   );

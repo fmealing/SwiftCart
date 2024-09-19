@@ -15,7 +15,7 @@ const Footer = () => {
         {/* Social Media Links */}
         <div className="flex justify-center space-x-10 mb-10">
           <a
-            href="https://www.linkedin.com/in/florian-mealing-859b022b4/"
+            href="https://www.linkedin.com/in/florian-mealing/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-white hover:text-gray-300"
@@ -23,7 +23,7 @@ const Footer = () => {
             <FontAwesomeIcon icon={faLinkedin} size="3x" />
           </a>
           <a
-            href="https://www.linkedin.com/in/florian-mealing-859b022b4/"
+            href="https://www.linkedin.com/in/florian-mealing/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-white hover:text-gray-300"
@@ -31,7 +31,7 @@ const Footer = () => {
             <FontAwesomeIcon icon={faTwitter} size="3x" />
           </a>
           <a
-            href="https://www.linkedin.com/in/florian-mealing-859b022b4/"
+            href="https://www.linkedin.com/in/florian-mealing/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-white hover:text-gray-300"
@@ -39,7 +39,7 @@ const Footer = () => {
             <FontAwesomeIcon icon={faFacebook} size="3x" />
           </a>
           <a
-            href="https://www.linkedin.com/in/florian-mealing-859b022b4/"
+            href="https://www.linkedin.com/in/florian-mealing/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-white hover:text-gray-300"

@@ -1,7 +1,8 @@
 import React from "react";
+import { useCart } from "@/src/context/CartContext"; // Use the cart context
 import CartItem from "@/src/components/CartItem";
 import CartSummary from "@/src/components/CartSummary";
-import { useCart } from "@/src/context/CartContext"; // Use the cart context
+import StarryBackground from "../components/StarryBackground";
 
 const Cart = () => {
   const { cartItems, updateQuantity, removeFromCart, isLoading } = useCart();
@@ -24,12 +25,17 @@ const Cart = () => {
   }
 
   return (
-    <div className="min-h-screen p-8 bg-amber-50">
+    <div className="relative min-h-screen flex flex-col justify-between p-10">
+      {/* Starry Background */}
+      <StarryBackground />
+
       {/* Page Title */}
-      <h1 className="text-4xl font-bold mb-8">Cart</h1>
+      <h1 className="relative text-5xl font-lora font-bold text-white mb-8 z-10">
+        Shopping Cart
+      </h1>
 
       {/* Cart Items */}
-      <div>
+      <div className="relative space-y-6 z-10 flex-grow">
         {cartItems.map((item) => (
           <CartItem
             key={item.id}
@@ -50,14 +56,19 @@ const Cart = () => {
       </div>
 
       {/* Cart Summary */}
-      <CartSummary
-        totalAmount={formatCurrency(parseFloat(totalAmount))}
-        items={cartItems.map((item) => ({
-          name: item.productName,
-          price: formatCurrency(item.productPrice),
-          quantity: item.quantity,
-        }))}
-      />
+      <div className="relative z-10 mt-8">
+        <CartSummary
+          totalAmount={totalAmount}
+          items={cartItems.map((item) => ({
+            name: item.productName,
+            price: item.productPrice,
+            quantity: item.quantity,
+          }))}
+        />
+      </div>
+
+      {/* Bottom Padding to Avoid Cutting Off Content */}
+      <div className="relative z-10 py-10"></div>
     </div>
   );
 };

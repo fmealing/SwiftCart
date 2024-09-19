@@ -22,22 +22,22 @@ const CartItem: React.FC<CartItemProps> = ({
   onRemove,
 }) => {
   return (
-    <div className="flex items-center justify-between py-4 border-b">
+    <div className="flex items-center justify-between py-4 px-6 border-b bg-white shadow-lg rounded-lg">
       {/* Product Image and Details */}
       <div className="flex items-center space-x-4">
         <img
           src={productImage}
           alt={productName}
-          className="w-32 h-32 rounded-full"
+          className="w-24 h-24 object-cover rounded-lg shadow-md"
         />
         <div>
-          <h3 className="font-lora text-xl font-bold text-amber-900">
+          <h3 className="font-lora text-2xl font-bold text-gray-900">
             {productName}
           </h3>
-          <p className="font-inter text-base text-amber-700">{productBrand}</p>
+          <p className="font-inter text-lg text-gray-500">{productBrand}</p>
           <button
             onClick={onRemove}
-            className="font-inter text-base text-amber-500 hover:underline"
+            className="font-inter text-sm text-red-500 hover:underline transition-colors duration-150"
           >
             Remove
           </button>
@@ -48,23 +48,21 @@ const CartItem: React.FC<CartItemProps> = ({
       <div className="flex items-center space-x-2">
         <button
           onClick={onDecreaseQuantity}
-          className="w-12 h-12 border border-gray-300 rounded-lg flex items-center justify-center bg-amber-200"
+          className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-all"
         >
           -
         </button>
-        <span className="font-inter text-lg font-semibold text-amber-900">
-          {quantity}
-        </span>
+        <span className="font-inter text-xl text-gray-800">{quantity}</span>
         <button
           onClick={onIncreaseQuantity}
-          className="w-12 h-12 border border-gray-300 rounded-lg flex items-center justify-center bg-amber-200"
+          className="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-all"
         >
           +
         </button>
       </div>
 
       {/* Product Price */}
-      <p className="font-inter text-2xl text-amber-900 font-semibold">
+      <p className="font-inter text-2xl text-gray-900 font-semibold">
         {productPrice}
       </p>
     </div>
