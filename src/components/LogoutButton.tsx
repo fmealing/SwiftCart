@@ -1,16 +1,29 @@
-import { supabase } from "../utils/supabase";
+import { createClient } from "../utils/supabase/component";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const LogoutButton = () => {
+  const supabase = createClient(); // Initialize Supabase client here
   const router = useRouter();
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
+
     if (error) {
       console.error("Error logging out:", error.message);
+      alert("Failed to log out. Please try again.");
     } else {
-      alert("Logged out successfully!");
-      router.push("/auth/login"); // Redirect to the loin page after logout
+      // Toast notification
+      toast.success("Logged Out!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      // Redirect the user to the login page
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 2000);
     }
   };
 

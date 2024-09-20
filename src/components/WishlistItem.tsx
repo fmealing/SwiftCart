@@ -33,14 +33,14 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-4 mb-4 flex items-center justify-between">
-      <div className="flex items-center space-x-4">
+    <div className="bg-white shadow-lg rounded-lg p-4 flex flex-col md:flex-row justify-between items-center mb-4">
+      <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
         <img
           src={productImage}
           alt={productName}
           className="w-24 h-24 rounded-full"
         />
-        <div>
+        <div className="text-center md:text-left">
           <h3 className="font-lora text-amber-800 font-bold text-xl">
             {productName}
           </h3>
@@ -58,7 +58,7 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
         {formatCurrency(productPrice)}
       </p>
 
-      <div className="flex flex-col space-y-2">
+      <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mt-4 md:mt-0">
         <button
           onClick={onAddToCart}
           className="px-4 py-2 text-lg bg-amber-600 text-white rounded-lg hover:bg-amber-700"

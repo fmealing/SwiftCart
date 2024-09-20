@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { createClient } from "../utils/supabase/component";
+import { useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -20,38 +19,17 @@ const OnboardingOne: React.FC<OnboardingOneProps> = ({
   nextStep,
   error,
 }) => {
-  const supabase = createClient();
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  useEffect(() => {
-    const checkUserSession = async () => {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
-
-      if (error || !user) {
-        console.error(
-          "Error fetching user or user not authenticated:",
-          error?.message
-        );
-        // Redirect user or ask them to verify email if necessary
-        // alert("Please verify your email or log in to continue.");
-      }
-    };
-
-    checkUserSession();
-  }, []);
-
   return (
-    <div className="flex min-h-screen">
-      <div className="w-1/2 flex items-center justify-center bg-white p-8">
+    <div className="min-h-screen flex flex-col lg:flex-row">
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-white p-8">
         <div className="max-w-md w-full">
-          <h1 className="font-lora text-[40px] font-semibold text-center">
+          <h1 className="font-lora text-3xl font-semibold text-center">
             Get Started Now
           </h1>
           <h3 className="font-lora mb-8 text-lg text-center">
@@ -62,7 +40,7 @@ const OnboardingOne: React.FC<OnboardingOneProps> = ({
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              nextStep(); // Proceed to next step after successful sign-up
+              nextStep();
             }}
           >
             <div>
@@ -109,7 +87,6 @@ const OnboardingOne: React.FC<OnboardingOneProps> = ({
               </div>
             </div>
 
-            {/* Error Message */}
             {error && <p className="text-red-500 mb-4">{error}</p>}
 
             <button
@@ -123,9 +100,9 @@ const OnboardingOne: React.FC<OnboardingOneProps> = ({
       </div>
 
       {/* Right side - Image and text */}
-      <div className="w-1/2 flex items-center justify-center bg-onboarding-1">
-        <h2 className="font-lora text-white text-5xl font-semibold p-8 stroke-amber-950 text-center">
-          Welcome to the World's largest you store
+      <div className="hidden lg:flex w-full lg:w-1/2 items-center justify-center bg-onboarding-1 p-8">
+        <h2 className="font-lora text-white text-4xl font-semibold text-center">
+          Welcome to the world's largest tech store
         </h2>
       </div>
     </div>

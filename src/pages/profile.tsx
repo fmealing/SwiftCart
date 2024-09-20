@@ -1,4 +1,3 @@
-// pages/profile.tsx
 import React, { useEffect, useState } from "react";
 import {
   fetchProfile,
@@ -6,13 +5,15 @@ import {
   handleChangePicture,
   handleDeletePicture,
   handleEditInterests,
-  handleLogout,
 } from "../utils/profileUtils";
 import ProfileInfo from "../components/ProfileInfo";
 import Interests from "../components/Interests";
-import Orders from "../components/Orders";
 import LoadingSpinner from "../components/LoadingSpinner";
+import NotLoggedIn from "../components/NotLoggedIn";
 import { useRouter } from "next/router";
+import { useAuth } from "@/src/context/AuthContext";
+import { useSpring, animated } from "@react-spring/web"; // Import React Spring
+import Orders from "../components/Orders";
 
 interface Profile {
   name: string;
@@ -31,23 +32,38 @@ const availableInterests = [
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoadingProfile, setIsLoadingProfile] = useState<boolean>(true);
   const router = useRouter();
+  const { user, logout, loading } = useAuth();
+
+  // Spring animations for profile and interests
+  const profileSpring = useSpring({
+    from: { opacity: 0, transform: "translateY(50px)" },
+    to: { opacity: 1, transform: "translateY(0px)" },
+    config: { tension: 200, friction: 20 },
+    delay: 200, // Delay for smoother transition
+  });
+
+  const interestsSpring = useSpring({
+    from: { opacity: 0, transform: "translateY(50px)" },
+    to: { opacity: 1, transform: "translateY(0px)" },
+    config: { tension: 200, friction: 20 },
+    delay: 400,
+  });
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      setIsLoading(true);
+      if (!user) return;
+      setIsLoadingProfile(true);
       const userProfile = await fetchProfile();
-
       if (userProfile) {
         setProfile(userProfile);
       }
-
-      setIsLoading(false);
+      setIsLoadingProfile(false);
     };
 
     fetchUserProfile();
-  }, []);
+  }, [user]);
 
   const handleSaveProfile = async (name: string, about: string) => {
     const updatedProfile = await saveProfile(name, about);
@@ -76,31 +92,43 @@ const ProfilePage = () => {
   };
 
   const handleLogoutClick = async () => {
-    const error = await handleLogout();
-    if (!error) {
-      router.push("/auth/login");
-    } else {
-      console.error("Error logging out:", error.message);
-    }
+    await logout();
+    router.push("/auth/login");
   };
 
-  if (isLoading) return <LoadingSpinner />;
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!user) {
+    return <NotLoggedIn />;
+  }
+
+  if (isLoadingProfile) {
+    return <LoadingSpinner />;
+  }
 
   return (
-    <div className="min-h-screen p-8 bg-amber-50">
-      <h1 className="text-4xl font-bold mb-8">Profile</h1>
+    <div className="min-h-screen p-8 bg-gradient-to-r from-amber-100 to-amber-300">
+      <h1 className="text-4xl font-extrabold mb-8 text-center text-amber-900">
+        My Profile
+      </h1>
       {profile && (
         <>
-          <ProfileInfo
-            profileName={profile.name}
-            aboutMe={profile.about}
-            profileImage={profile.avatar_url || "/images/default-avatar.jpg"}
-            onSave={handleSaveProfile}
-            onChangePicture={handleChangeProfilePicture}
-            onDeletePicture={handleDeleteProfilePicture}
-          />
+          {/* Profile Info Component with Animation */}
+          <animated.div style={profileSpring}>
+            <ProfileInfo
+              profileName={profile.name}
+              aboutMe={profile.about}
+              profileImage={profile.avatar_url || "/images/default-avatar.jpg"}
+              onSave={handleSaveProfile}
+              onChangePicture={handleChangeProfilePicture}
+              onDeletePicture={handleDeleteProfilePicture}
+            />
+          </animated.div>
 
-          <div className="mt-8">
+          {/* Interests Section with Animation */}
+          <animated.div style={interestsSpring} className="mt-12">
             <Interests
               interests={(Array.isArray(profile.interests)
                 ? profile.interests
@@ -112,12 +140,15 @@ const ProfilePage = () => {
               availableInterests={availableInterests}
               onEdit={handleEditProfileInterests}
             />
-          </div>
+          </animated.div>
 
-          <div className="mt-8 text-center">
+          {/* Orders */}
+          <div>{/* <Orders /> */}</div>
+          {/* Logout Button */}
+          <div className="mt-16 text-center">
             <button
               onClick={handleLogoutClick}
-              className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-700 transition duration-300"
+              className="px-8 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-300 shadow-md"
             >
               Logout
             </button>

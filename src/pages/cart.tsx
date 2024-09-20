@@ -3,9 +3,13 @@ import { useCart } from "@/src/context/CartContext"; // Use the cart context
 import CartItem from "@/src/components/CartItem";
 import CartSummary from "@/src/components/CartSummary";
 import StarryBackground from "../components/StarryBackground";
+import LoadingSpinner from "../components/LoadingSpinner";
+import NotLoggedIn from "../components/NotLoggedIn"; // For redirecting non-logged-in users
+import { useAuth } from "@/src/context/AuthContext"; // Import your AuthContext
 
 const Cart = () => {
   const { cartItems, updateQuantity, removeFromCart, isLoading } = useCart();
+  const { user, loading } = useAuth(); // Access the user and loading state from AuthContext
 
   // Function to format price using the currency formatter
   const formatCurrency = (value: number) => {
@@ -15,22 +19,34 @@ const Cart = () => {
     }).format(value);
   };
 
-  // Calculate total amount
-  const totalAmount = cartItems
-    .reduce((acc, item) => acc + item.productPrice * item.quantity, 0)
-    .toFixed(2);
+  // Calculate total amount (now it stays as a number)
+  const totalAmount = cartItems.reduce(
+    (acc, item) => acc + item.productPrice * item.quantity,
+    0
+  );
 
+  // If authentication is still loading, show a loading spinner
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  // If the user is not logged in, show the NotLoggedIn component
+  if (!user) {
+    return <NotLoggedIn />;
+  }
+
+  // If the cart is still loading, show the loading spinner
   if (isLoading) {
-    return <div className="text-center">Loading...</div>; // Display loading message
+    return <LoadingSpinner />;
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-between p-10">
+    <div className="relative min-h-screen flex flex-col justify-between p-4 md:p-10">
       {/* Starry Background */}
       <StarryBackground />
 
       {/* Page Title */}
-      <h1 className="relative text-5xl font-lora font-bold text-white mb-8 z-10">
+      <h1 className="relative text-3xl md:text-5xl font-lora font-bold text-white mb-6 md:mb-8 z-10">
         Shopping Cart
       </h1>
 
@@ -41,7 +57,7 @@ const Cart = () => {
             key={item.id}
             productImage={item.productImage}
             productName={item.productName}
-            productPrice={formatCurrency(item.productPrice)}
+            productPrice={item.productPrice}
             productBrand={item.productBrand}
             quantity={item.quantity}
             onIncreaseQuantity={() =>
@@ -58,7 +74,7 @@ const Cart = () => {
       {/* Cart Summary */}
       <div className="relative z-10 mt-8">
         <CartSummary
-          totalAmount={totalAmount}
+          totalAmount={totalAmount} // Pass totalAmount as a number
           items={cartItems.map((item) => ({
             name: item.productName,
             price: item.productPrice,

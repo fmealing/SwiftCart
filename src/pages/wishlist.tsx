@@ -5,12 +5,15 @@ import { useCart } from "@/src/context/CartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import StarryBackground from "../components/StarryBackground";
+import LoadingSpinner from "../components/LoadingSpinner";
+import NotLoggedIn from "../components/NotLoggedIn";
+import { useAuth } from "@/src/context/AuthContext";
 
 const WishlistPage = () => {
   const { wishlistItems, removeFromWishlist, clearWishlist } = useWishlist();
   const { addToCart } = useCart();
+  const { user, loading } = useAuth();
 
-  // Function to format currency
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("en-GB", {
       style: "currency",
@@ -18,12 +21,10 @@ const WishlistPage = () => {
     }).format(value);
   };
 
-  // Handler to remove item from wishlist
   const handleRemove = (id: string) => {
     removeFromWishlist(id);
   };
 
-  // Handler to add a single item to cart
   const handleAddToCart = (item) => {
     const productToAdd = {
       id: item.id,
@@ -37,9 +38,7 @@ const WishlistPage = () => {
     removeFromWishlist(item.id);
   };
 
-  // Handler to "Buy Now" for a single item
   const handleBuyNow = (item) => {
-    // Add item to cart
     const productToAdd = {
       id: item.id,
       productName: item.productName,
@@ -50,12 +49,8 @@ const WishlistPage = () => {
     };
     addToCart(productToAdd);
     removeFromWishlist(item.id);
-
-    // Redirect to checkout page
-    // Using Stripe
   };
 
-  // Handler to add all wishlist items to cart
   const handleAddAllToCart = () => {
     wishlistItems.forEach((item) => {
       const productToAdd = {
@@ -71,18 +66,26 @@ const WishlistPage = () => {
     clearWishlist();
   };
 
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!user) {
+    return <NotLoggedIn />;
+  }
+
   return (
-    <div className="relative min-h-screen flex flex-col justify-between p-10">
+    <div className="relative min-h-screen flex flex-col justify-between p-4 md:p-10">
       {/* Starry Background */}
       <StarryBackground />
 
       {/* Page Title */}
-      <h1 className="relative text-5xl font-lora font-bold text-white mb-8 z-10">
+      <h1 className="relative text-3xl md:text-5xl font-lora font-bold text-white mb-6 md:mb-8 z-10">
         Wish List
       </h1>
 
       {/* Wishlist Items */}
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-col space-y-4">
         {wishlistItems.map((item) => (
           <WishlistItem
             key={item.id}
@@ -102,7 +105,7 @@ const WishlistPage = () => {
       <div className="relative z-10 mt-8 text-center">
         <button
           onClick={handleAddAllToCart}
-          className="px-8 py-4 bg-black text-white rounded-lg hover:bg-gray-800 border-2 border-amber-500"
+          className="px-6 py-4 bg-black text-white rounded-lg hover:bg-gray-800 border-2 border-amber-500"
         >
           <div className="flex gap-2 items-center">
             <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />

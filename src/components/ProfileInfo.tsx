@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { useSpring, animated } from "@react-spring/web"; // Import React Spring
 
 interface ProfileInfoProps {
   profileName: string;
@@ -20,8 +22,28 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
   const [name, setName] = useState(profileName);
   const [about, setAbout] = useState(aboutMe);
 
+  // Spring animations for picture and form fields
+  const pictureSpring = useSpring({
+    from: { opacity: 0, scale: 0.8 },
+    to: { opacity: 1, scale: 1 },
+    config: { tension: 200, friction: 15 },
+    delay: 100,
+  });
+
+  const formSpring = useSpring({
+    from: { opacity: 0, translateX: -50 },
+    to: { opacity: 1, translateX: 0 },
+    config: { tension: 200, friction: 15 },
+    delay: 500,
+  });
+
   const handleSave = () => {
     onSave(name, about);
+
+    toast.success(`Saved your changes, ${name}!`, {
+      position: "top-right",
+      autoClose: 2000,
+    });
   };
 
   const handlePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,59 +52,66 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
   };
 
   return (
-    <div className="flex flex-col space-x-6">
-      {/* Profile Image */}
-      <div className="flex gap-8 text-center p-8">
+    <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6 items-center bg-white rounded-lg shadow-lg p-6 lg:p-8">
+      {/* Profile Image with Animation */}
+      <animated.div
+        style={pictureSpring}
+        className="text-center p-4 flex flex-col items-center lg:items-start"
+      >
         <img
           src={profileImage}
-          alt="Profile, default avatar Designed by Freepik"
-          className="w-28 h-28 rounded-full object-cover"
+          alt="Profile"
+          className="w-36 h-36 rounded-full object-cover shadow-lg"
         />
-        <div className="mt-4 flex space-x-2">
-          <label className="px-4 py-2 bg-black text-white rounded-lg h-14 hover:bg-amber-700 transition-all duration-200 cursor-pointer">
-            Change picture
+        <div className="mt-4 flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-2">
+          <label className="px-4 py-2 bg-black text-white rounded-lg cursor-pointer hover:bg-amber-700 transition duration-200">
+            Change Picture
             <input
               type="file"
               className="hidden"
-              onChange={handlePictureChange} // Trigger file input on change
+              onChange={handlePictureChange}
             />
           </label>
           <button
             onClick={onDeletePicture}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg h-14 hover:bg-red-700 transition-all duration-200"
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
           >
-            Delete picture
+            Delete Picture
           </button>
         </div>
-      </div>
+      </animated.div>
 
-      {/* Profile Details */}
-      <div className="space-y-4">
+      {/* Profile Details Form with Animation */}
+      <animated.div style={formSpring} className="space-y-6 flex-grow w-full">
         <div>
-          <label className="block text-sm font-medium">Profile Name</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Profile Name
+          </label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-1/2 px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium">About me</label>
+          <label className="block text-sm font-medium text-gray-700">
+            About Me
+          </label>
           <textarea
             value={about}
             onChange={(e) => setAbout(e.target.value)}
-            className="w-1/2 h-36 px-4 py-2 border rounded-lg"
+            className="w-full h-36 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
           />
         </div>
 
         <button
           onClick={handleSave}
-          className="px-6 py-2 bg-amber-500 text-white rounded-lg"
+          className="px-6 py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition duration-200"
         >
-          Save changes
+          Save Changes
         </button>
-      </div>
+      </animated.div>
     </div>
   );
 };

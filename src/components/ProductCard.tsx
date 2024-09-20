@@ -1,8 +1,11 @@
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingBag } from "@fortawesome/free-solid-svg-icons";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
+import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 interface ProductCardProps {
   name: string;
@@ -14,46 +17,64 @@ interface ProductCardProps {
 const ProductCard = ({ name, price, image, brand }: ProductCardProps) => {
   const { addToCart } = useCart();
   const { addToWishlist } = useWishlist();
+  const { user } = useAuth();
 
   const handleAddToWishlist = () => {
-    const productToAdd = {
-      id: `${name}-${price}`, // Generate a unique ID
-      productName: name,
-      productPrice: price,
-      productImage: image,
-      productBrand: brand,
-    };
+    if (user) {
+      const productToAdd = {
+        id: `${name}-${price}`,
+        productName: name,
+        productPrice: price,
+        productImage: image,
+        productBrand: brand,
+      };
 
-    addToWishlist(productToAdd);
+      addToWishlist(productToAdd);
 
-    // Show a tast notification
-    toast.success(`${name} added to your wishlist!`, {
-      position: "top-right",
-      autoClose: 2000,
-    });
+      toast.success(`${name} added to your wishlist!`, {
+        position: "top-right",
+        autoClose: 2000,
+      });
+    } else {
+      toast.error("You must be logged in to add items to your wishlist!", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+    }
   };
 
   const handleAddToCart = () => {
-    const productToAdd = {
-      id: `${name}-${price}`, // Generate a unique ID
-      productName: name,
-      productPrice: price,
-      productImage: image,
-      productBrand: brand,
-      quantity: 1,
-    };
+    if (user) {
+      const productToAdd = {
+        id: `${name}-${price}`,
+        productName: name,
+        productPrice: price,
+        productImage: image,
+        productBrand: brand,
+        quantity: 1,
+      };
 
-    addToCart(productToAdd);
+      addToCart(productToAdd);
 
-    // Show a toast notification
-    toast.success(`${name} added to your cart!`, {
-      position: "top-right",
-      autoClose: 2000,
-    });
+      toast.success(`${name} added to your cart!`, {
+        position: "top-right",
+        autoClose: 2000,
+      });
+    } else {
+      toast.error("You must be logged in to add items to your cart!", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+    }
   };
 
   return (
-    <div className="relative bg-white p-6 rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105 hover:shadow-2xl">
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="relative bg-white p-6 rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105 hover:shadow-2xl"
+    >
       <button
         onClick={handleAddToWishlist}
         className="absolute top-8 right-8 text-gray-500 hover:text-red-500 transition duration-300"
@@ -81,7 +102,7 @@ const ProductCard = ({ name, price, image, brand }: ProductCardProps) => {
           <FontAwesomeIcon icon={faShoppingBag} size="2xl" />
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

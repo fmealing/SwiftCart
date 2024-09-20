@@ -60,7 +60,7 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
             id: item.id,
             productImage: item.product_image,
             productName: item.product_name,
-            productPrice: Number(item.product_price), // Ensure this is a number
+            productPrice: Number(item.product_price),
             productBrand: item.product_brand,
           }))
         );
@@ -92,7 +92,7 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
           product_brand: item.productBrand,
         },
       ])
-      .select(); // Make sure to use .select() to get the inserted data
+      .select();
 
     if (error) {
       console.error("Error adding item to wishlist:", error.message);

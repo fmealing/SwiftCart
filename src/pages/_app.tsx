@@ -1,8 +1,8 @@
-import "../styles/globals.scss";
+import "../styles/main.scss";
 import { AppProps } from "next/app";
 import { useEffect, useState } from "react";
-import { createClient } from "../utils/supabase/component"; // Use component-specific Supabase client
-import { User } from "@supabase/supabase-js";
+import { createClient } from "../utils/supabase/component";
+import { Session, User } from "@supabase/supabase-js"; // Make sure to import Session type
 import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { CartProvider } from "../context/CartContext";
@@ -10,17 +10,25 @@ import { WishlistProvider } from "../context/WishlistContext";
 import { SearchProvider } from "../context/SearchContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthProvider } from "../context/AuthContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const supabase = createClient(); // Initialize Supabase client for components
+  const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true); // Add loading state to prevent premature redirects
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch session on initial load
     const getSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setUser(data.session?.user || null);
+      const { data, error } = await supabase.auth.getSession();
+
+      if (error) {
+        console.error("Error fetching session:", error.message);
+        setLoading(false);
+        return;
+      }
+
+      setUser(data?.session?.user ?? null);
       setLoading(false); // Set loading to false after session is checked
     };
 
@@ -28,8 +36,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     // Listen for changes to auth state (login/logout)
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user || null);
+      (_event: string, session: Session | null) => {
+        setUser(session?.user ?? null);
         setLoading(false); // Ensure loading is false after auth change
       }
     );
@@ -39,25 +47,26 @@ function MyApp({ Component, pageProps }: AppProps) {
     };
   }, [supabase]);
 
-  // Pass loading state and user state to all pages
   return (
     <CartProvider>
       <WishlistProvider>
         <SearchProvider>
-          <Navbar user={user} />
-          <Component {...pageProps} user={user} loading={loading} />
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-          <Footer />
+          <AuthProvider>
+            <Navbar user={user} />
+            <Component {...pageProps} user={user} loading={loading} />
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+            <Footer />
+          </AuthProvider>
         </SearchProvider>
       </WishlistProvider>
     </CartProvider>

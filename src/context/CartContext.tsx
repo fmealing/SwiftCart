@@ -84,9 +84,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       return;
     }
 
-    // Log the item being inserted
-    console.log("Item to be inserted into cart:", item);
-
     const { data, error } = await supabase
       .from("cart_items")
       .insert([
@@ -104,7 +101,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     if (error) {
       console.error("Error adding item to cart:", error.message);
     } else {
-      console.log("Item successfully added to cart:", data);
       setCartItems((prevItems) => [...prevItems, { id: data[0].id, ...item }]); // Add the inserted item to local state
     }
   };

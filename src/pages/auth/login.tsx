@@ -1,81 +1,64 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { createClient } from "@/src/utils/supabase/component";
+import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
-  const supabase = createClient(); // Initialize the Supabase client for components
+  const supabase = createClient();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
-  // Function to handle login form submission
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Step 1: Login with email and password
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-
     if (error) {
       setError(error.message);
     } else {
       setError("");
-
-      // Step 2: Fetch the user's profile data after login
       const user = data.user;
-
       if (user) {
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", user.id)
-          .single();
-
-        if (profileError) {
-          console.error("Error fetching user profile:", profileError.message);
-        } else {
-          console.log("User profile:", profile);
-          // Store the profile in local state or global state management
-        }
-
-        // Step 3: Redirect to the homepage after successful login
         router.push("/");
       }
     }
   };
 
-  // Function to handle login with Google OAuth
   const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
     });
-
     if (error) setError(error.message);
   };
 
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      {/* Flex container to split the screen into two */}
-      <div className="flex w-full h-screen max-w-7xl">
-        {/* Login card taking 50% of the width */}
-        <div className="w-1/2 bg-white shadow-md rounded-lg p-8 flex flex-col justify-center h-full">
-          <div className="mb-6 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="flex flex-col lg:flex-row w-full max-w-7xl h-full lg:h-auto rounded-lg shadow-lg overflow-hidden">
+        {/* Form Section */}
+        <div className="w-full lg:w-1/2 bg-white p-8 flex flex-col justify-center">
+          <div className="text-center mb-8">
             <img
               src="/images/SwiftCart.webp"
               alt="SwiftCart"
-              className="mx-auto h-20 filter brightness-0 mb-16"
+              className="mx-auto h-16 filter brightness-0 mb-8"
             />
-            <h1 className="font-lora font-semibold mt-4 text-3xl mb-2">
+            <h1 className="font-lora font-semibold text-3xl mb-2">
               Welcome back to SwiftCart
             </h1>
             <p className="font-inter text-base">
-              Enter your username and password to continue
+              Enter your email and password to continue
             </p>
           </div>
+
           <form onSubmit={handleLogin} className="space-y-4">
             <input
               type="email"
@@ -84,13 +67,24 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
             />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
+              />
+              <span
+                className="absolute top-0 right-3 h-full flex items-center cursor-pointer"
+                onClick={togglePasswordVisibility}
+              >
+                <FontAwesomeIcon
+                  icon={showPassword ? faEyeSlash : faEye}
+                  className="text-amber-600"
+                />
+              </span>
+            </div>
             <div className="flex justify-between items-center">
               <label className="flex items-center">
                 <input
@@ -99,13 +93,16 @@ const Login = () => {
                 />
                 <span className="ml-2 text-sm">Remember me</span>
               </label>
-              <a href="#" className="text-sm text-amber-400">
+              <Link
+                href="/auth/reset-password"
+                className="text-sm text-amber-400"
+              >
                 Forgot password?
-              </a>
+              </Link>
             </div>
             <button
               type="submit"
-              className="flex items-center justify-center w-full py-2 bg-amber-400 text-white font-semibold rounded-lg max-w-xs mx-auto"
+              className="w-full py-2 bg-amber-400 text-white font-semibold rounded-lg"
             >
               Sign In
             </button>
@@ -114,7 +111,7 @@ const Login = () => {
           <div className="mt-6">
             <button
               onClick={handleGoogleLogin}
-              className="w-full py-2 bg-white border border-gray-300 text-gray-500 font-semibold rounded-lg flex items-center justify-center max-w-xs mx-auto"
+              className="w-full py-2 bg-white border border-gray-300 text-gray-500 font-semibold rounded-lg flex items-center justify-center"
             >
               <img
                 src="/images/google-logo.png"
@@ -126,20 +123,21 @@ const Login = () => {
           </div>
           <p className="mt-4 text-sm text-center">
             Don't have an account?
-            <a href="/auth/signup" className="text-amber-400">
-              Register
-            </a>
+            <Link href="/auth/signup" className="text-amber-400">
+              {" "}
+              Register{" "}
+            </Link>
           </p>
         </div>
 
-        {/* Image section taking 50% of the width */}
-        <div className="w-1/2 relative flex justify-center items-center h-full">
+        {/* Image Section */}
+        {/* Hidden on mobile (sm screens), visible on larger screens */}
+        <div className="hidden lg:flex w-full lg:w-1/2 relative items-center justify-center">
           <img
             src="/images/controller-login.jpg"
             alt="white PS4 controller"
             className="w-full h-full object-cover"
           />
-          {/* Overlay with amber tint */}
           <div className="absolute inset-0 bg-amber-500 opacity-30"></div>
         </div>
       </div>

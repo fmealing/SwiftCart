@@ -1,0 +1,8 @@
+What is left to do?
+- Testing
+- Reformating (done✅)
+- Add Microinteractions (done✅)
+- Finish up
+- Deployment
+- Once again, fix the cart (done✅)
+- Make it responsive (done✅)

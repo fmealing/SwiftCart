@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { createClient } from "../utils/supabase/component"; // Supabase client
+import { createClient } from "../utils/supabase/component";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import StarryBackground from "../components/StarryBackground"; // Your particle effect component
+import StarryBackground from "../components/StarryBackground";
 
 const Hero = () => {
   const [firstName, setFirstName] = useState<string | null>(null); // Track the user's first name
@@ -40,34 +40,43 @@ const Hero = () => {
 
   // Handle button click to navigate to the recommended products page
   const handleShopProducts = () => {
-    router.push("/products"); // Navigate to the shop
+    router.push("/product/recommended");
   };
 
   return (
-    <section className="relative hero-background h-screen text-white">
+    <section className="relative hero-background h-screen text-white" id="top">
       {/* Starry Background */}
-      <StarryBackground className="starry-background" />
+      <StarryBackground />
 
       {/* Gradient Overlay */}
       <div className="hero-overlay" />
 
       {/* Hero Content */}
       <div className="hero-content">
-        <h1 className="hero-title">Minimalist Tech</h1>
-        <p className="hero-subtitle">Where simplicity meets innovation.</p>
+        <h1 className="hero-title text-4xl md:text-6xl">Minimalist Tech</h1>
+        <p className="hero-subtitle text-lg md:text-2xl">
+          Where simplicity meets innovation.
+        </p>
 
         {/* Buttons */}
         {firstName ? (
-          <button onClick={handleShopProducts} className="hero-button">
+          <button
+            onClick={handleShopProducts}
+            className="hero-button text-base md:text-lg mt-6 md:mt-8"
+          >
             Shop Recommended Products
           </button>
         ) : (
           <>
             <Link href="/auth/signup">
-              <p className="hero-button">Register</p>
+              <p className="hero-button text-base md:text-lg mt-6 md:mt-8">
+                Register
+              </p>
             </Link>
             <Link href="/auth/login">
-              <p className="hero-button mt-4">Already have an account?</p>
+              <p className="hero-button text-base md:text-lg mt-4">
+                Already have an account?
+              </p>
             </Link>
           </>
         )}

@@ -1,4 +1,4 @@
-import { createClient } from "./supabase/component"; // Import Supabase client
+import { createClient } from "./supabase/component"; 
 const supabase = createClient();
 
 export const fetchProfile = async () => {
@@ -55,31 +55,52 @@ export const saveProfile = async (name: string, about: string) => {
 };
 
 export const handleChangePicture = async (file: File | null) => {
-  if (!file) return null;
+  if (!file) {
+    console.error("No file provided.");
+    return null;
+  }
 
   const {
     data: { user },
     error: userError,
   } = await supabase.auth.getUser();
+
   if (userError || !user) {
     console.error("User not logged in:", userError?.message);
     return null;
+  } else {
+    console.log("Authenticated user:", user);
   }
 
+  const fileExtension = file.name.split(".").pop();
+  const fileName = `${user.id}/avatar-${Date.now()}.${fileExtension}`;
+
+  console.log("Uploading file:", fileName, "with type:", file.type);
+
+  // Include the 'owner' in the file options
   const { data: uploadData, error: uploadError } = await supabase.storage
     .from("avatars")
-    .upload(`${user.id}/avatar.jpg`, file, { upsert: true });
+    .upload(fileName, file, {
+      upsert: true, // or false, depending on your needs
+      // Set the 'owner' in the metadata
+      metadata: {
+        owner: user.id,
+      },
+    });
 
   if (uploadError) {
     console.error("Error uploading file:", uploadError.message);
     return null;
+  } else {
+    console.log("File uploaded successfully:", uploadData);
   }
 
   const { data: publicUrlData } = supabase.storage
     .from("avatars")
-    .getPublicUrl(`${user.id}/avatar.jpg`);
+    .getPublicUrl(fileName);
 
   const avatar_url = publicUrlData.publicUrl;
+  console.log("Public URL of the uploaded image:", avatar_url);
 
   const { error: updateError } = await supabase
     .from("profiles")
@@ -89,6 +110,8 @@ export const handleChangePicture = async (file: File | null) => {
   if (updateError) {
     console.error("Error updating profile:", updateError.message);
     return null;
+  } else {
+    console.log("Profile updated with new avatar URL.");
   }
 
   return avatar_url;

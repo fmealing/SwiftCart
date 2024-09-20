@@ -15,10 +15,7 @@ const StarryBackground: React.FC = () => {
 
   useEffect(() => {
     initParticlesEngine(async (engine) => {
-      // Load the particles engine with desired features
       await loadSlim(engine);
-      // For more features, you can use loadFull instead:
-      // await loadFull(engine);
     }).then(() => {
       setEngineInitialized(true);
     });

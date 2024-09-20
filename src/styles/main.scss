@@ -1,0 +1,238 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "@fontsource/lora"; /* Lora */
+@import "@fontsource/inter"; /* Inter */
+
+body {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+@layer components {
+  /* Hero Section Background */
+  .hero-background {
+    background-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.5),
+        rgba(0, 0, 0, 0.2)
+      ),
+      url("/images/Hero-mac.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Gradient Overlay */
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.3)
+    );
+    z-index: 1; /* Overlay the particles */
+  }
+
+  /* Particle Effect Container */
+  .particle-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* Behind content but above background */
+  }
+
+  /* Starry Background */
+  .starry-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Behind all content */
+  }
+
+  /* Hero Content Styling */
+  .hero-content {
+    position: relative;
+    z-index: 2; /* Above overlay and particles */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: white;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #f9fafb; /* Almost white */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Add subtle shadow for contrast */
+    animation: fadeIn 2s ease-out;
+
+    @media (min-width: 768px) {
+      font-size: 4rem; /* Larger font size on medium screens and up */
+    }
+
+    @media (min-width: 1024px) {
+      font-size: 6rem; /* Even larger font size on larger screens */
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: #e5e7eb; /* Slightly off-white */
+    margin-top: 1rem;
+    animation: fadeIn 2.5s ease-out;
+    white-space: nowrap;
+    border-right: 2px solid rgba(255, 255, 255, 0.75);
+    overflow: hidden;
+    width: 0;
+    animation: typewriter 3s steps(40, end) forwards,
+      blink 0.75s step-end infinite;
+
+    @media (min-width: 768px) {
+      font-size: 1.75rem; /* Larger font size on medium screens */
+    }
+
+    @media (min-width: 1024px) {
+      font-size: 2rem; /* Larger font size on large screens */
+    }
+  }
+
+  /* Typewriter effect */
+  @keyframes typewriter {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }
+
+  /* Buttons */
+  .hero-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #f59e0b;
+    color: #fff;
+    border-radius: 9999px;
+    margin-top: 1.5rem;
+    text-transform: uppercase;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, background-color 0.3s;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #d97706;
+      transform: scale(1.05);
+    }
+
+    @media (min-width: 768px) {
+      padding: 1rem 2rem;
+      font-size: 1.25rem; /* Adjust button size on medium screens */
+    }
+
+    @media (min-width: 1024px) {
+      padding: 1.25rem 2.5rem;
+      font-size: 1.5rem; /* Adjust button size on larger screens */
+    }
+  }
+
+  /* Fading effect for hero elements */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Trending Items Backgrounds with Gradient */
+  .bg-laptops,
+  .bg-tablets,
+  .bg-consoles,
+  .bg-pc-peripherals,
+  .bg-onboarding-1 {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.5),
+        rgba(0, 0, 0, 0.2)
+      );
+      z-index: 1;
+    }
+  }
+
+  // laptops
+  .bg-laptops {
+    background-image: url("/images/laptops.jpg");
+  }
+
+  // tablets
+  .bg-tablets {
+    background-image: url("/images/tablets.jpg");
+  }
+
+  // consoles
+  .bg-consoles {
+    background-image: url("/images/consoles.jpg");
+  }
+
+  // pc peripherals
+  .bg-pc-peripherals {
+    background-image: url("/images/pc-peripherals 2.jpg");
+  }
+
+  /* Add particle animation effect */
+  @keyframes stars {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-1000px);
+    }
+  }
+
+  /* Space-themed background */
+  .starry-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Places it behind other elements */
+  }
+}

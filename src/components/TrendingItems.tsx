@@ -16,22 +16,22 @@ const TrendingItems = () => {
         <TrendingItemCard
           title="Laptops & Computers"
           bgClass="bg-laptops"
-          link="/products"
+          link="/search?query=laptop"
         />
         <TrendingItemCard
           title="Tablets"
           bgClass="bg-tablets"
-          link="/products"
+          link="/search?query=tablet"
         />
         <TrendingItemCard
           title="Gaming Consoles"
           bgClass="bg-consoles"
-          link="/products"
+          link="/search?query=console"
         />
         <TrendingItemCard
           title="PC Peripherals"
           bgClass="bg-pc-peripherals"
-          link="/products"
+          link="/search?query=peripheral"
         />
       </div>
     </section>
