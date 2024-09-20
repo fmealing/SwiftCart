@@ -9,7 +9,8 @@ const Orders = () => {
     longitude: number;
   } | null>(null);
   const mapRef = useRef<HTMLDivElement | null>(null);
-  const [mapInstance, setMapInstance] = useState<Map | null>(null); // Use Map type for mapInstance
+  const [mapInstance, setMapInstance] = useState<Map | null>(null);
+  const [isClient, setIsClient] = useState(false); // Track whether it's client-side
 
   const orders = [
     {
@@ -19,8 +20,14 @@ const Orders = () => {
     },
   ];
 
+  // Set the isClient state to true once the component mounts (on client side)
   useEffect(() => {
-    if ("geolocation" in navigator) {
+    setIsClient(true);
+  }, []);
+
+  // Get user's geolocation
+  useEffect(() => {
+    if (isClient && "geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setUserLocation({
@@ -34,10 +41,11 @@ const Orders = () => {
         }
       );
     }
-  }, []);
+  }, [isClient]);
 
+  // Initialize Leaflet map on the client-side
   useEffect(() => {
-    if (userLocation && mapRef.current && typeof window !== "undefined") {
+    if (userLocation && mapRef.current && isClient) {
       if (!mapInstance) {
         const newMapInstance = new Map(mapRef.current).setView(
           [userLocation.latitude, userLocation.longitude],
@@ -63,7 +71,7 @@ const Orders = () => {
         );
       }
     }
-  }, [userLocation, mapInstance]);
+  }, [userLocation, mapInstance, isClient]);
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
