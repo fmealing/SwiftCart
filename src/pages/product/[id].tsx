@@ -85,7 +85,11 @@ const ProductPage = () => {
         <ProductImage imageUrl={product.image_url} name={product.name} />
 
         {/* Product Info */}
-        <ProductInfo product={product} addToCart={addToCart} user={user} />
+        <ProductInfo
+          product={product}
+          addToCart={addToCart}
+          user={user ? { id: user.id, email: user.email ?? "" } : null} // Ensure email is a string or pass a fallback
+        />
       </div>
 
       {/* Customer Reviews */}
