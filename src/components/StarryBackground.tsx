@@ -1,5 +1,3 @@
-// src/components/StarryBackground.tsx
-
 import React, { useEffect, useMemo, useState } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim"; // or loadFull if you prefer
@@ -21,19 +19,23 @@ const StarryBackground: React.FC = () => {
     });
   }, []);
 
-  const particlesLoaded = (container?: Container) => {
-    console.log("Particles loaded:", container);
+  // Updated particlesLoaded function to return a Promise<void>
+  const particlesLoaded = async (container?: Container): Promise<void> => {
+    return new Promise((resolve) => {
+      console.log("Particles loaded:", container);
+      resolve();
+    });
   };
 
   const options: ISourceOptions = useMemo(
     () => ({
       fullScreen: {
-        enable: true, // Disable full-screen mode
-        zIndex: -1, // behind the content
+        enable: true,
+        zIndex: -1, // Place behind the content
       },
       background: {
         color: {
-          value: "#000000", // Set background color
+          value: "#000000", // Background color
         },
       },
       particles: {
@@ -67,7 +69,13 @@ const StarryBackground: React.FC = () => {
       },
       interactivity: {
         events: {
-          resize: true,
+          onHover: {
+            enable: true,
+            mode: "repulse",
+          },
+          resize: {
+            enable: true, // Changed from boolean to object with enable property
+          },
         },
       },
       detectRetina: true,
