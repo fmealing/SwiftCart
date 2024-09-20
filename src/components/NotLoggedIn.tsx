@@ -25,7 +25,7 @@ const NotLoggedIn: React.FC = () => {
         </p>
         <div className="mt-4">
           <button
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/auth/login")}
             className="px-6 py-3 bg-gray-900 text-white text-lg rounded-lg hover:bg-gray-700 transition duration-200"
           >
             Go to Login

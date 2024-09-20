@@ -143,7 +143,9 @@ const ProfilePage = () => {
           </animated.div>
 
           {/* Orders */}
-          <div>{/* <Orders /> */}</div>
+          <div>
+            <Orders />
+          </div>
           {/* Logout Button */}
           <div className="mt-16 text-center">
             <button

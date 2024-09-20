@@ -196,6 +196,22 @@ body {
     }
   }
 
+  // Onboarding 1
+  .bg-onboarding-1 {
+    background: linear-gradient(to bottom, #b4530969, #fcd34d7b),
+      url("/images/onboarding-1.jpg");
+    background-size: cover;
+    background-position: center;
+  }
+
+  // Contact
+  .bg-contact {
+    background: linear-gradient(to bottom, #b4530969, #fcd34d7b),
+      url("/images/contact-background.jpg");
+    background-size: cover;
+    background-position: center;
+  }
+
   // laptops
   .bg-laptops {
     background-image: url("/images/laptops.jpg");

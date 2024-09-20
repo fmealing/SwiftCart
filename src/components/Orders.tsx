@@ -1,18 +1,65 @@
-// TODO: implement the Orders component
+import React, { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+import "leaflet/dist/leaflet.css"; // Import Leaflet CSS
 
-import React from "react";
+const Orders = () => {
+  const [userLocation, setUserLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+  const mapRef = useRef<HTMLDivElement | null>(null);
 
-interface OrdersProps {
-  orders: {
-    productImage: string;
-    total: string;
-    status: string;
-    mapImage: string;
-  }[];
-}
+  const orders = [
+    {
+      productImage: "/images/product/macbook.jpg",
+      total: "£129.99",
+      status: "Delivered",
+    },
+  ];
 
-const Orders: React.FC<OrdersProps> = ({ orders }) => {
-  // Function to dynamically set status colors
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error("Error getting user location:", error);
+          setUserLocation({ latitude: 40.7128, longitude: -74.006 });
+        }
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userLocation && mapRef.current && typeof window !== "undefined") {
+      const L = require("leaflet");
+
+      // Ensure the container is emptied before re-initializing the map
+      if (mapRef.current._leaflet_id) {
+        mapRef.current.remove();
+      }
+
+      const mapInstance = L.map(mapRef.current).setView(
+        [userLocation.latitude, userLocation.longitude],
+        13
+      );
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(mapInstance);
+
+      L.marker([userLocation.latitude, userLocation.longitude])
+        .addTo(mapInstance)
+        .bindPopup("You are here.")
+        .openPopup();
+    }
+  }, [userLocation]);
+
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "delivered":
@@ -35,7 +82,6 @@ const Orders: React.FC<OrdersProps> = ({ orders }) => {
             key={index}
             className="p-5 bg-white border rounded-lg shadow-lg flex flex-col space-y-4"
           >
-            {/* Order Summary */}
             <div className="flex items-center space-x-4 p-4">
               <img
                 src={order.productImage}
@@ -43,7 +89,7 @@ const Orders: React.FC<OrdersProps> = ({ orders }) => {
                 className="w-40 h-40 object-contain rounded-lg"
               />
               <div className="flex-1">
-                <p className="font-inter text-lg text-slate-500">Order total</p>
+                <p className="font-inter text-lg text-slate-500">Order Total</p>
                 <p className="font-inter font-bold text-lg text-slate-800">
                   {order.total}
                 </p>
@@ -57,15 +103,16 @@ const Orders: React.FC<OrdersProps> = ({ orders }) => {
               </div>
             </div>
 
-            {/* Horizontal Line Divider */}
             <hr className="border-t-4 border-gray-200" />
 
-            {/* Map Image */}
-            <img
-              src={order.mapImage}
-              alt="Map"
-              className="w-full h-64 rounded-lg object-cover"
-            />
+            {/* Map Container */}
+            <div className="w-full h-64 rounded-lg">
+              {userLocation ? (
+                <div ref={mapRef} className="w-full h-full" />
+              ) : (
+                <p>Loading map...</p>
+              )}
+            </div>
           </div>
         ))}
       </div>
