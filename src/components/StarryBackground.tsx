@@ -1,25 +1,26 @@
-import React, { useEffect, useMemo, useState } from "react";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim"; // or loadFull if you prefer
+import { useEffect, useState, useMemo } from "react";
+import { Particles, initParticlesEngine } from "@tsparticles/react"; // Correctly import Particles as a named export
+import { loadSlim } from "@tsparticles/slim"; // Use loadSlim for optimized particle size
 import {
+  Container,
   MoveDirection,
   OutMode,
-  Container,
   ISourceOptions,
 } from "@tsparticles/engine";
 
 const StarryBackground: React.FC = () => {
   const [engineInitialized, setEngineInitialized] = useState(false);
 
+  // Run once to initialize the engine
   useEffect(() => {
     initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
+      await loadSlim(engine); // Loads the slim version of the particles engine
     }).then(() => {
-      setEngineInitialized(true);
+      setEngineInitialized(true); // Mark engine as initialized
     });
   }, []);
 
-  // Updated particlesLoaded function to return a Promise<void>
+  // Handle particle loading and return a Promise
   const particlesLoaded = async (container?: Container): Promise<void> => {
     return new Promise((resolve) => {
       console.log("Particles loaded:", container);
@@ -27,75 +28,90 @@ const StarryBackground: React.FC = () => {
     });
   };
 
+  // Particle configuration options
   const options: ISourceOptions = useMemo(
     () => ({
-      fullScreen: {
-        enable: true,
-        zIndex: -1, // Place behind the content
-      },
       background: {
         color: {
-          value: "#000000", // Background color
+          value: "#0d47a1", // Background color of the particle container
         },
       },
-      particles: {
-        number: {
-          value: 100,
-          density: {
-            enable: true,
-            area: 800,
-          },
-        },
-        color: {
-          value: "#ffffff",
-        },
-        shape: {
-          type: "circle",
-        },
-        opacity: {
-          value: 0.5,
-        },
-        size: {
-          value: { min: 1, max: 3 },
-        },
-        move: {
-          enable: true,
-          speed: 0.5,
-          direction: MoveDirection.none,
-          outModes: {
-            default: OutMode.out,
-          },
-        },
-      },
+      fpsLimit: 120,
       interactivity: {
         events: {
+          onClick: {
+            enable: true,
+            mode: "push",
+          },
           onHover: {
             enable: true,
             mode: "repulse",
           },
-          resize: {
-            enable: true, // Changed from boolean to object with enable property
+        },
+        modes: {
+          push: {
+            quantity: 4,
           },
+          repulse: {
+            distance: 200,
+            duration: 0.4,
+          },
+        },
+      },
+      particles: {
+        color: {
+          value: "#ffffff",
+        },
+        links: {
+          color: "#ffffff",
+          distance: 150,
+          enable: true,
+          opacity: 0.5,
+          width: 1,
+        },
+        move: {
+          direction: MoveDirection.none,
+          enable: true,
+          outModes: {
+            default: OutMode.out,
+          },
+          random: false,
+          speed: 6,
+          straight: false,
+        },
+        number: {
+          density: {
+            enable: true,
+          },
+          value: 80,
+        },
+        opacity: {
+          value: 0.5,
+        },
+        shape: {
+          type: "circle",
+        },
+        size: {
+          value: { min: 1, max: 5 },
         },
       },
       detectRetina: true,
     }),
-    []
+    [] // Empty array to memoize and avoid unnecessary re-renders
   );
 
-  if (!engineInitialized) {
-    return null; // Don't render until the engine is initialized
-  }
-
-  return (
-    <div className="starry-background">
+  // Render the particles only if the engine is initialized
+  if (engineInitialized) {
+    return (
       <Particles
         id="tsparticles"
-        options={options}
-        particlesLoaded={particlesLoaded}
+        options={options} // Particle options
+        particlesLoaded={particlesLoaded} // Function triggered once particles are loaded
       />
-    </div>
-  );
+    );
+  }
+
+  return null; // Render nothing while the engine is initializing
 };
 
 export default StarryBackground;

@@ -11,14 +11,6 @@ const Cart = () => {
   const { cartItems, updateQuantity, removeFromCart, isLoading } = useCart();
   const { user, loading } = useAuth(); // Access the user and loading state from AuthContext
 
-  // Function to format price using the currency formatter
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-GB", {
-      style: "currency",
-      currency: "GBP",
-    }).format(value);
-  };
-
   // Calculate total amount (now it stays as a number)
   const totalAmount = cartItems.reduce(
     (acc, item) => acc + item.productPrice * item.quantity,

@@ -5,6 +5,7 @@ import { createClient } from "../../utils/supabase/component";
 import Link from "next/link";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion"; // For animations
+import Image from "next/image";
 
 const supabase = createClient();
 
@@ -78,7 +79,7 @@ const RecommendedProducts = () => {
               <Link href={`/product/${product.id}`}>
                 <p>
                   <div className="relative">
-                    <img
+                    <Image
                       src={product.image_url}
                       alt={product.name}
                       className="w-full h-64 object-cover"

@@ -4,7 +4,6 @@ import { createClient } from "@/src/utils/supabase/component";
 import { useCart } from "@/src/context/CartContext";
 import { useAuth } from "@/src/context/AuthContext";
 import LoadingSpinner from "@/src/components/LoadingSpinner";
-import { toast } from "react-toastify";
 import ProductImage from "@/src/components/ProductImage";
 import ProductInfo from "@/src/components/ProductInfo";
 import CustomerReviews from "@/src/components/CustomerReviews";

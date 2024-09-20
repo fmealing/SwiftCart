@@ -48,9 +48,14 @@ const useProducts = () => {
         `);
 
       if (error) throw error;
-      setProducts(data);
-    } catch (err: any) {
-      setError(err.message);
+      setProducts(data as Product[]); // Explicitly type data as Product[]
+    } catch (err: unknown) {
+      // Check if the error has a message property
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred");
+      }
     } finally {
       setLoading(false);
     }

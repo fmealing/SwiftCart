@@ -14,7 +14,6 @@ const SignUp = () => {
   const [error, setError] = useState("");
 
   const nextStep = () => setStep(step + 1);
-  const prevStep = () => setStep(step - 1);
 
   const handleSignUp = async () => {
     const { email, password } = userDetails;
@@ -24,7 +23,7 @@ const SignUp = () => {
       return;
     }
 
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { error } = await supabase.auth.signUp({ email, password });
 
     if (error) {
       setError(error.message);

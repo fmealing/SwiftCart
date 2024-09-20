@@ -22,13 +22,6 @@ const WishlistPage = () => {
   const { addToCart } = useCart();
   const { user, loading } = useAuth();
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-GB", {
-      style: "currency",
-      currency: "GBP",
-    }).format(value);
-  };
-
   const handleRemove = (id: string) => {
     removeFromWishlist(id);
   };

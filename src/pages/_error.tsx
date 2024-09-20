@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { NextPageContext } from "next"; // Import NextPageContext for typing
 
 const ErrorPage = ({ statusCode }: { statusCode: number }) => {
   const router = useRouter();
@@ -39,7 +40,7 @@ const ErrorPage = ({ statusCode }: { statusCode: number }) => {
 };
 
 // If the error page is rendered on the server, the statusCode is passed as a prop
-ErrorPage.getInitialProps = ({ res, err }: { res: any; err: any }) => {
+ErrorPage.getInitialProps = ({ res, err }: NextPageContext) => {
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
   return { statusCode };
 };

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const teamMembers = [
@@ -32,7 +33,7 @@ const Team = () => {
           {teamMembers.map((member, index) => (
             <div key={index} className="w-full md:w-1/3 px-4 mb-8">
               <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition">
-                <img
+                <Image
                   src={member.image}
                   alt={member.name}
                   className="w-full h-64 object-cover"

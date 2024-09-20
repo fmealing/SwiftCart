@@ -18,6 +18,15 @@ interface WishlistContextType {
   isLoading: boolean; // Add loading state for UI
 }
 
+interface SupabaseWishlistItem {
+  id: string;
+  user_id: string;
+  product_image: string;
+  product_name: string;
+  product_price: number;
+  product_brand: string;
+}
+
 // Create the Supabase client
 const supabase = createClient();
 
@@ -56,7 +65,7 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
         console.error("Error fetching wishlist items:", wishlistError.message);
       } else if (wishlistData) {
         setWishlistItems(
-          wishlistData.map((item: any) => ({
+          wishlistData.map((item: SupabaseWishlistItem) => ({
             id: item.id,
             productImage: item.product_image,
             productName: item.product_name,

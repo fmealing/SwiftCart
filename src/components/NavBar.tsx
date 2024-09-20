@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart,
@@ -33,35 +33,42 @@ const Navbar: React.FC<NavbarProps> = () => {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Debounced search function
-  const fetchSuggestions = useCallback(
-    debounce(async (query: string) => {
-      const { data, error } = await supabase
-        .from("products")
-        .select("id, name")
-        .ilike("name", `%${query}%`)
-        .limit(5);
+  // Memoize the debounce function
+  const debouncedFetchSuggestions = useMemo(
+    () =>
+      debounce(async (query: string) => {
+        const { data, error } = await supabase
+          .from("products")
+          .select("id, name")
+          .ilike("name", `%${query}%`)
+          .limit(5);
 
-      if (error) {
-        console.error("Error fetching suggestions:", error);
-        return;
-      }
+        if (error) {
+          console.error("Error fetching suggestions:", error);
+          return;
+        }
 
-      if (data) {
-        setSuggestions(data);
-      }
-    }, 300),
-    []
+        if (data) {
+          setSuggestions(data);
+        }
+      }, 300),
+    [supabase] // Dependencies for the debounce function
   );
 
+  // Ensure the debounced function is called only when searchTerm changes
   useEffect(() => {
     if (searchTerm === "") {
       setSuggestions([]);
       return;
     }
 
-    fetchSuggestions(searchTerm);
-  }, [searchTerm, fetchSuggestions]);
+    debouncedFetchSuggestions(searchTerm);
+
+    // Cleanup the debounce effect to avoid memory leaks
+    return () => {
+      debouncedFetchSuggestions.cancel();
+    };
+  }, [searchTerm, debouncedFetchSuggestions]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
