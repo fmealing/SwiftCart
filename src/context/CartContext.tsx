@@ -101,7 +101,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     if (error) {
       console.error("Error adding item to cart:", error.message);
     } else {
-      setCartItems((prevItems) => [...prevItems, { id: data[0].id, ...item }]); // Add the inserted item to local state
+      // Remove the 'id' from the original item to avoid duplicate id issue
+      const { id, ...itemWithoutId } = item;
+      setCartItems((prevItems) => [
+        ...prevItems,
+        { id: data[0].id, ...itemWithoutId },
+      ]);
     }
   };
 
