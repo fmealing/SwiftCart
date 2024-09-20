@@ -36,7 +36,7 @@ const Hero = () => {
     };
 
     checkUser();
-  }, []);
+  }, [supabase]);
 
   // Handle button click to navigate to the recommended products page
   const handleShopProducts = () => {

@@ -14,6 +14,7 @@ import Link from "next/link";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/router";
 import { User } from "@supabase/supabase-js";
+import Image from "next/image";
 
 interface Product {
   id: string;
@@ -50,7 +51,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         setSuggestions(data);
       }
     }, 300),
-    [supabase]
+    []
   );
 
   useEffect(() => {
@@ -96,7 +97,7 @@ const Navbar: React.FC<NavbarProps> = () => {
           {/* Logo */}
           <div>
             <Link href="/" className="text-2xl font-bold text-gray-800">
-              <img
+              <Image
                 src="/images/SwiftCart.webp"
                 alt="Swift Cart logo"
                 className="h-12 md:h-16 filter brightness-0"

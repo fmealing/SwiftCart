@@ -1,4 +1,5 @@
 import { createContext, useState, useContext } from "react";
+import PropTypes from "prop-types";
 
 // Define the Product type
 type Product = {
@@ -51,4 +52,8 @@ export const useSearch = () => {
     throw new Error("useSearch must be used within a SearchProvider");
   }
   return context;
+};
+
+SearchProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

@@ -17,7 +17,7 @@ const NotLoggedIn: React.FC = () => {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-amber-500 to-orange-600">
       <div className="p-8 bg-white rounded-lg shadow-xl text-center space-y-4 max-w-lg mx-auto">
         <h2 className="text-4xl font-bold text-gray-900">
-          Oops! You're not logged in.
+          Oops! You&apos;re not logged in.
         </h2>
         <p className="text-lg text-gray-600">
           Please log in to access this page. Redirecting you to the login

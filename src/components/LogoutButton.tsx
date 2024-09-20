@@ -1,6 +1,5 @@
 import { createClient } from "../utils/supabase/component";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { toast } from "react-toastify";
 
 const LogoutButton = () => {

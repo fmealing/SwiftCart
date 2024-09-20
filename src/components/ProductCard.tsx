@@ -6,6 +6,7 @@ import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface ProductCardProps {
   name: string;
@@ -82,7 +83,7 @@ const ProductCard = ({ name, price, image, brand }: ProductCardProps) => {
         <FontAwesomeIcon icon={faHeart} size="2xl" />
       </button>
 
-      <img
+      <Image
         src={image}
         alt={name}
         className="w-full h-64 object-cover mb-4 rounded-lg"

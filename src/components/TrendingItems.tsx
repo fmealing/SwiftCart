@@ -7,7 +7,7 @@ const TrendingItems = () => {
       <div className="text-center mb-10">
         <h2 className="font-lora text-4xl font-bold">Trending Items</h2>
         <p className="font-inter text-lg text-gray-600">
-          Don't Miss Out on What's Hot Right Now
+          Don&apos;t Miss Out on What&apos;s Hot Right Now
         </p>
       </div>
 

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 interface Review {
@@ -31,7 +32,7 @@ const CustomerReviews: React.FC<CustomerReviewsProps> = ({ reviews }) => (
             </div>
             <p className="text-lg mb-4 text-gray-700">{review.review_text}</p>
             <div className="flex items-center space-x-3">
-              <img
+              <Image
                 src={review.avatar_url || "/default-avatar.jpg"}
                 alt={review.review_name || "Anonymous"}
                 className="w-10 h-10 rounded-full"

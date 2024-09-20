@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React, { useState } from "react";
 
 interface InterestsProps {
@@ -50,7 +51,7 @@ const Interests: React.FC<InterestsProps> = ({
               key={interest.name}
               className="w-full h-48 bg-amber-100 rounded-xl flex flex-col justify-between shadow-md hover:shadow-lg transition-shadow p-4"
             >
-              <img
+              <Image
                 src={interest.image}
                 alt={interest.name}
                 className="w-full h-24 object-cover rounded-lg"
@@ -62,7 +63,7 @@ const Interests: React.FC<InterestsProps> = ({
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
           {availableInterests.map((interest) => (
-            <div
+            <button
               key={interest.name}
               className={`cursor-pointer w-full h-48 rounded-xl p-4 flex flex-col justify-between shadow-md hover:shadow-lg transition-shadow ${
                 selectedInterests.includes(interest.name)
@@ -71,13 +72,13 @@ const Interests: React.FC<InterestsProps> = ({
               }`}
               onClick={() => toggleInterest(interest.name)}
             >
-              <img
+              <Image
                 src={interest.image}
                 alt={interest.name}
                 className="w-full h-24 object-cover rounded-lg"
               />
               <p className="mt-2 font-semibold text-lg">{interest.name}</p>
-            </div>
+            </button>
           ))}
         </div>
       )}

@@ -4,20 +4,40 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import AddToCartButton from "./AddToCartButton";
 
-interface ProductInfoProps {
-  product: {
-    id: number;
-    name: string;
-    price: number;
-    description: {
-      title: string;
-      details: { title: string; text: string }[];
-    };
-    brand: string;
-    image_url: string;
+// Define a type for product details
+interface ProductDetails {
+  title: string;
+  text: string;
+}
+
+// Define a type for the product prop
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  description: {
+    title: string;
+    details: ProductDetails[];
   };
-  addToCart: (item: any) => void;
-  user: any;
+  brand: string;
+  image_url: string;
+}
+
+// Define a type for the cart item
+interface CartItem {
+  id: string;
+  productName: string;
+  productPrice: number;
+  productImage: string;
+  productBrand: string;
+  quantity: number;
+}
+
+// Define the type for the props
+interface ProductInfoProps {
+  product: Product;
+  addToCart: (item: CartItem) => void;
+  user: { id: string; email: string } | null; // Define user type explicitly
 }
 
 const ProductInfo: React.FC<ProductInfoProps> = ({
@@ -36,14 +56,16 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
       return;
     }
 
-    addToCart({
+    const cartItem: CartItem = {
       id: product.id.toString(),
       productName: product.name,
       productPrice: product.price,
       productImage: product.image_url || "/placeholder.jpg",
       productBrand: product.brand,
       quantity: 1,
-    });
+    };
+
+    addToCart(cartItem);
 
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);

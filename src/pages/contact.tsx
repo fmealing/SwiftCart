@@ -37,8 +37,8 @@ const Contact = () => {
             Get in Touch
           </h1>
           <p className="text-xl text-gray-700 mb-6">
-            We'd love to hear from you! Whether by carrier pigeon, smoke signal,
-            or even email.
+            We&apos;d love to hear from you! Whether by carrier pigeon, smoke
+            signal, or even email.
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
             <input

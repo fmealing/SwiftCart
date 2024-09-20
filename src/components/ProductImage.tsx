@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 interface ProductImageProps {
@@ -7,7 +8,7 @@ interface ProductImageProps {
 
 const ProductImage: React.FC<ProductImageProps> = ({ imageUrl, name }) => (
   <div className="flex justify-center">
-    <img
+    <Image
       src={imageUrl || "/placeholder.jpg"}
       alt={name}
       className="w-full h-auto object-cover rounded-lg shadow-lg"

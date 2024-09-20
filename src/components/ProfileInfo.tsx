@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useSpring, animated } from "@react-spring/web"; // Import React Spring
+import Image from "next/image";
 
 interface ProfileInfoProps {
   profileName: string;
@@ -58,7 +59,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
         style={pictureSpring}
         className="text-center p-4 flex flex-col items-center lg:items-start"
       >
-        <img
+        <Image
           src={profileImage}
           alt="Profile"
           className="w-36 h-36 rounded-full object-cover shadow-lg"
@@ -84,10 +85,14 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
       {/* Profile Details Form with Animation */}
       <animated.div style={formSpring} className="space-y-6 flex-grow w-full">
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="profile-name"
+            className="block text-sm font-medium text-gray-700"
+          >
             Profile Name
           </label>
           <input
+            id="profile-name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -95,10 +100,14 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="about-me"
+            className="block text-sm font-medium text-gray-700"
+          >
             About Me
           </label>
           <textarea
+            id="about-me"
             value={about}
             onChange={(e) => setAbout(e.target.value)}
             className="w-full h-36 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400"

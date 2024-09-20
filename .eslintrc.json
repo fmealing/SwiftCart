@@ -1,3 +1,31 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": [
+    "next/core-web-vitals",
+    "next",
+    "next/typescript",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "prettier"
+  ],
+  "plugins": ["@typescript-eslint", "react", "jsx-a11y", "import"],
+  "rules": {
+    // Customize or add additional rules here
+    "react/react-in-jsx-scope": "off", // Next.js doesn't require React import in every file
+    "react/no-unescaped-entities": "error", // Ensure no unescaped entities like quotes
+    "@typescript-eslint/no-explicit-any": "warn", // Warn when using "any" type
+    "@typescript-eslint/no-unused-vars": "warn", // Warn when variables are defined but not used
+    "@next/next/no-img-element": "warn", // Prefer next/image for optimization
+    "jsx-a11y/alt-text": "warn", // Ensure all images have alt text for accessibility
+    "import/no-unresolved": "error" // Ensure all imports are valid
+  },
+  "settings": {
+    "react": {
+      "version": "detect" // Automatically detect the React version
+    }
+  }
 }

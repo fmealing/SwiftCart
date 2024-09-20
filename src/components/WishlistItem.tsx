@@ -4,6 +4,7 @@ import {
   faArrowRightFromBracket,
   faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
 
 interface WishlistItemProps {
   id: string;
@@ -35,7 +36,7 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 flex flex-col md:flex-row justify-between items-center mb-4">
       <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-        <img
+        <Image
           src={productImage}
           alt={productName}
           className="w-24 h-24 rounded-full"

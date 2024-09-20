@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 interface OnboardingTwoProps {
@@ -8,7 +9,7 @@ const OnboardingTwo: React.FC<OnboardingTwoProps> = ({ resetForm }) => {
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-amber-500 p-4">
       {/* Large background SVG */}
-      <img
+      <Image
         src="/vectors/success.svg"
         alt="Success"
         className="absolute inset-0 w-full h-full object-contain opacity-20"

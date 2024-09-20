@@ -11,13 +11,22 @@ interface CartItem {
   quantity: number;
 }
 
+interface SupabaseCartItem {
+  id: string;
+  product_image: string;
+  product_name: string;
+  product_price: number;
+  product_brand: string;
+  quantity: number;
+}
+
 interface CartContextType {
   cartItems: CartItem[];
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
-  isLoading: boolean; // Add loading state to the context type
+  isLoading: boolean;
 }
 
 // Create the context with a default value
@@ -29,7 +38,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const supabase = createClient();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true); // Initialize loading state
+  const [isLoading, setIsLoading] = useState(true);
 
   // Fetch cart items from Supabase
   useEffect(() => {
@@ -41,7 +50,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (userError || !user) {
         console.error("User not logged in:", userError?.message);
-        setIsLoading(false); // Stop loading on error
+        setIsLoading(false);
         return;
       }
 
@@ -52,11 +61,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (error) {
         console.error("Error fetching cart items:", error.message);
-        setIsLoading(false); // Stop loading on error
+        setIsLoading(false);
       } else {
-        console.log("Cart items from Supabase:", data); // Debugging log
+        console.log("Cart items from Supabase:", data);
         setCartItems(
-          data.map((item: any) => ({
+          data.map((item: SupabaseCartItem) => ({
             id: item.id,
             productImage: item.product_image,
             productName: item.product_name,
@@ -65,12 +74,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
             quantity: item.quantity,
           }))
         );
-        setIsLoading(false); // Stop loading once data is fetched
+        setIsLoading(false);
       }
     };
 
     fetchCartItems();
-  }, []); // Add empty dependency array to ensure it runs only once on mount
+  }, [supabase]);
 
   // Add an item to the cart
   const addToCart = async (item: CartItem) => {
@@ -101,16 +110,21 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     if (error) {
       console.error("Error adding item to cart:", error.message);
     } else {
-      // Remove the 'id' from the original item to avoid duplicate id issue
-      const { id, ...itemWithoutId } = item;
+      // Ensure that you're only using the 'id' from the Supabase returned data
       setCartItems((prevItems) => [
         ...prevItems,
-        { id: data[0].id, ...itemWithoutId },
+        {
+          id: data[0].id, // Use Supabase generated id
+          productName: item.productName,
+          productPrice: item.productPrice,
+          productImage: item.productImage,
+          productBrand: item.productBrand,
+          quantity: item.quantity,
+        },
       ]);
     }
   };
 
-  // Remove an item from the cart
   const removeFromCart = async (id: string) => {
     const {
       data: { user },
@@ -122,26 +136,22 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       return;
     }
 
-    // URL-encode the id to handle special characters
     const encodedId = encodeURIComponent(id);
 
-    // Delete the item from Supabase
     const { error } = await supabase
       .from("cart_items")
       .delete()
       .eq("user_id", user?.id)
-      .eq("id", encodedId); // Use the URL-encoded id
+      .eq("id", encodedId);
 
     if (error) {
       console.error("Error removing item from cart:", error.message);
-      return; // Exit if there was an error
+      return;
     }
 
-    // Only update local state after deletion is successful
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
-  // Update the quantity of an item
   const updateQuantity = async (id: string, quantity: number) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
@@ -160,7 +170,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       .eq("id", id);
   };
 
-  // Clear the entire cart
   const clearCart = async () => {
     setCartItems([]);
 
@@ -179,10 +188,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         removeFromCart,
         updateQuantity,
         clearCart,
-        isLoading, // Pass loading state to context
+        isLoading,
       }}
     >
-      {isLoading ? <div>Loading...</div> : children} {/* Show loading state */}
+      {isLoading ? <div>Loading...</div> : children}
     </CartContext.Provider>
   );
 };

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 // Interface for defining the structure of props passed to the CartItem component
@@ -28,7 +29,7 @@ const CartItem = ({
       {/* Product Image and Details */}
       <div className="flex flex-col md:flex-row items-center space-x-0 md:space-x-4 space-y-4 md:space-y-0">
         {/* Product Image */}
-        <img
+        <Image
           src={productImage}
           alt={productName}
           className="w-24 h-24 object-cover rounded-lg shadow-md"

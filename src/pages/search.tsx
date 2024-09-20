@@ -5,6 +5,7 @@ import Link from "next/link";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
 
 // type of Product
 type Product = {
@@ -57,7 +58,7 @@ const SearchResultsPage = () => {
           className="text-amber-600 text-6xl mb-4"
         />
         <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-          No products found for "{query}"
+          No products found for &quot;{query}&quot;
         </h2>
         <p className="text-gray-500">Try searching with a different keyword</p>
       </div>
@@ -67,7 +68,7 @@ const SearchResultsPage = () => {
   return (
     <div className="container mx-auto px-6 py-12">
       <h1 className="font-lora text-4xl font-bold mb-8 text-gray-800">
-        Search Results for "{query}"
+        Search Results for &quot;{query}&quot;
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {products.map((product) => (
@@ -77,7 +78,7 @@ const SearchResultsPage = () => {
             className="border rounded-lg shadow-lg p-6 transform transition duration-300 hover:scale-105 hover:shadow-xl bg-white"
           >
             <div className="relative">
-              <img
+              <Image
                 src={product.image_url}
                 alt={product.name}
                 className="w-full h-64 object-cover rounded-lg mb-4"

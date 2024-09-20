@@ -1,14 +1,16 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
+interface UserDetails {
+  email: string;
+  password: string;
+}
+
 interface OnboardingOneProps {
-  userDetails: {
-    email: string;
-    password: string;
-  };
-  setUserDetails: React.Dispatch<React.SetStateAction<any>>;
+  userDetails: UserDetails;
+  setUserDetails: React.Dispatch<React.SetStateAction<UserDetails>>;
   nextStep: () => void;
   error: string;
 }
@@ -36,7 +38,6 @@ const OnboardingOne: React.FC<OnboardingOneProps> = ({
             Enter your credentials to create your account
           </h3>
 
-          {/* Email & Password Sign Up Form */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -77,7 +78,14 @@ const OnboardingOne: React.FC<OnboardingOneProps> = ({
                 />
                 <span
                   className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                  role="button"
+                  tabIndex={0}
                   onClick={togglePasswordVisibility}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      togglePasswordVisibility();
+                    }
+                  }}
                 >
                   <FontAwesomeIcon
                     icon={showPassword ? faEyeSlash : faEye}
@@ -102,7 +110,7 @@ const OnboardingOne: React.FC<OnboardingOneProps> = ({
       {/* Right side - Image and text */}
       <div className="hidden lg:flex w-full lg:w-1/2 items-center justify-center bg-onboarding-1 p-8">
         <h2 className="font-lora text-white text-4xl font-semibold text-center">
-          Welcome to the world's largest tech store
+          Welcome to the world&apos;s largest tech store
         </h2>
       </div>
     </div>

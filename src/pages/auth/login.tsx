@@ -1,9 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { createClient } from "@/src/utils/supabase/component";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image"; // Import Next Image
 
 const Login = () => {
   const supabase = createClient();
@@ -46,10 +47,12 @@ const Login = () => {
         {/* Form Section */}
         <div className="w-full lg:w-1/2 bg-white p-8 flex flex-col justify-center">
           <div className="text-center mb-8">
-            <img
+            <Image
               src="/images/SwiftCart.webp"
               alt="SwiftCart"
-              className="mx-auto h-16 filter brightness-0 mb-8"
+              width={64}
+              height={64}
+              className="mx-auto filter brightness-0 mb-8"
             />
             <h1 className="font-lora font-semibold text-3xl mb-2">
               Welcome back to SwiftCart
@@ -76,8 +79,15 @@ const Login = () => {
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
               />
               <span
+                role="button"
+                tabIndex={0}
                 className="absolute top-0 right-3 h-full flex items-center cursor-pointer"
                 onClick={togglePasswordVisibility}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    togglePasswordVisibility();
+                  }
+                }}
               >
                 <FontAwesomeIcon
                   icon={showPassword ? faEyeSlash : faEye}
@@ -113,16 +123,18 @@ const Login = () => {
               onClick={handleGoogleLogin}
               className="w-full py-2 bg-white border border-gray-300 text-gray-500 font-semibold rounded-lg flex items-center justify-center"
             >
-              <img
+              <Image
                 src="/images/google-logo.png"
                 alt="Google"
-                className="h-5 w-5 mr-2"
+                width={20}
+                height={20}
+                className="mr-2"
               />
               Sign in with Google
             </button>
           </div>
           <p className="mt-4 text-sm text-center">
-            Don't have an account?
+            Don&apos;t have an account?
             <Link href="/auth/signup" className="text-amber-400">
               {" "}
               Register{" "}
@@ -131,12 +143,13 @@ const Login = () => {
         </div>
 
         {/* Image Section */}
-        {/* Hidden on mobile (sm screens), visible on larger screens */}
         <div className="hidden lg:flex w-full lg:w-1/2 relative items-center justify-center">
-          <img
+          <Image
             src="/images/controller-login.jpg"
             alt="white PS4 controller"
-            className="w-full h-full object-cover"
+            layout="fill"
+            objectFit="cover"
+            className="w-full h-full"
           />
           <div className="absolute inset-0 bg-amber-500 opacity-30"></div>
         </div>
