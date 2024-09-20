@@ -8,6 +8,7 @@ const Orders = () => {
     longitude: number;
   } | null>(null);
   const mapRef = useRef<HTMLDivElement | null>(null);
+  const [mapInstance, setMapInstance] = useState<any>(null); // Store Leaflet map instance
 
   const orders = [
     {
@@ -17,6 +18,7 @@ const Orders = () => {
     },
   ];
 
+  // Fetch user's location using Geolocation API
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -28,6 +30,7 @@ const Orders = () => {
         },
         (error) => {
           console.error("Error getting user location:", error);
+          // Default to New York if geolocation fails
           setUserLocation({ latitude: 40.7128, longitude: -74.006 });
         }
       );
@@ -38,27 +41,34 @@ const Orders = () => {
     if (userLocation && mapRef.current && typeof window !== "undefined") {
       const L = require("leaflet");
 
-      // Ensure the container is emptied before re-initializing the map
-      if (mapRef.current._leaflet_id) {
-        mapRef.current.remove();
+      // Initialize map only if it doesn't exist already
+      if (!mapInstance) {
+        const newMapInstance = L.map(mapRef.current).setView(
+          [userLocation.latitude, userLocation.longitude],
+          13
+        );
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(newMapInstance);
+
+        // Add marker to the map
+        L.marker([userLocation.latitude, userLocation.longitude])
+          .addTo(newMapInstance)
+          .bindPopup("You are here.")
+          .openPopup();
+
+        setMapInstance(newMapInstance); // Save the Leaflet map instance
+      } else {
+        // If the map already exists, just update the view (e.g., user location changes)
+        mapInstance.setView(
+          [userLocation.latitude, userLocation.longitude],
+          13
+        );
       }
-
-      const mapInstance = L.map(mapRef.current).setView(
-        [userLocation.latitude, userLocation.longitude],
-        13
-      );
-
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(mapInstance);
-
-      L.marker([userLocation.latitude, userLocation.longitude])
-        .addTo(mapInstance)
-        .bindPopup("You are here.")
-        .openPopup();
     }
-  }, [userLocation]);
+  }, [userLocation, mapInstance]);
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
