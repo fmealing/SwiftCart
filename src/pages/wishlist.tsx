@@ -9,6 +9,14 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import NotLoggedIn from "../components/NotLoggedIn";
 import { useAuth } from "@/src/context/AuthContext";
 
+interface WishlistItemType {
+  id: string;
+  productName: string;
+  productPrice: number;
+  productImage: string;
+  productBrand: string;
+}
+
 const WishlistPage = () => {
   const { wishlistItems, removeFromWishlist, clearWishlist } = useWishlist();
   const { addToCart } = useCart();
@@ -25,7 +33,7 @@ const WishlistPage = () => {
     removeFromWishlist(id);
   };
 
-  const handleAddToCart = (item) => {
+  const handleAddToCart = (item: WishlistItemType) => {
     const productToAdd = {
       id: item.id,
       productName: item.productName,
@@ -38,7 +46,7 @@ const WishlistPage = () => {
     removeFromWishlist(item.id);
   };
 
-  const handleBuyNow = (item) => {
+  const handleBuyNow = (item: WishlistItemType) => {
     const productToAdd = {
       id: item.id,
       productName: item.productName,
