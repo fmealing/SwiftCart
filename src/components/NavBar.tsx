@@ -13,13 +13,18 @@ import { createClient } from "@/src/utils/supabase/component";
 import Link from "next/link";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/router";
+import { User } from "@supabase/supabase-js";
 
 interface Product {
   id: string;
   name: string;
 }
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  user: User | null;
+}
+
+const Navbar: React.FC<NavbarProps> = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [suggestions, setSuggestions] = useState<Product[]>([]);
   const { setSearchQuery } = useSearch();
