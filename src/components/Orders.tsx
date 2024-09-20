@@ -1,16 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Map, tileLayer, marker } from "leaflet";
-import "leaflet/dist/leaflet.css";
-import Image from "next/image"; // Use Next.js Image component
+import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+
+// Dynamically import LeafletMap with server-side rendering disabled
+const LeafletMap = dynamic(() => import("./LeafletMap"), {
+  ssr: false,
+  loading: () => <p>Loading map...</p>,
+});
 
 const Orders = () => {
   const [userLocation, setUserLocation] = useState<{
     latitude: number;
     longitude: number;
   } | null>(null);
-  const mapRef = useRef<HTMLDivElement | null>(null);
-  const [mapInstance, setMapInstance] = useState<Map | null>(null);
-  const [isClient, setIsClient] = useState(false); // Track whether it's client-side
 
   const orders = [
     {
@@ -20,14 +22,8 @@ const Orders = () => {
     },
   ];
 
-  // Set the isClient state to true once the component mounts (on client side)
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Get user's geolocation
-  useEffect(() => {
-    if (isClient && "geolocation" in navigator) {
+    if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setUserLocation({
@@ -41,37 +37,7 @@ const Orders = () => {
         }
       );
     }
-  }, [isClient]);
-
-  // Initialize Leaflet map on the client-side
-  useEffect(() => {
-    if (userLocation && mapRef.current && isClient) {
-      if (!mapInstance) {
-        const newMapInstance = new Map(mapRef.current).setView(
-          [userLocation.latitude, userLocation.longitude],
-          13
-        );
-
-        tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(newMapInstance);
-
-        marker([userLocation.latitude, userLocation.longitude])
-          .addTo(newMapInstance)
-          .bindPopup("You are here.")
-          .openPopup();
-
-        setMapInstance(newMapInstance); // Save the Leaflet map instance
-      } else {
-        // Update map view if map already exists
-        mapInstance.setView(
-          [userLocation.latitude, userLocation.longitude],
-          13
-        );
-      }
-    }
-  }, [userLocation, mapInstance, isClient]);
+  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -123,7 +89,9 @@ const Orders = () => {
             {/* Map Container */}
             <div className="w-full h-64 rounded-lg">
               {userLocation ? (
-                <div ref={mapRef} className="w-full h-full" />
+                <LeafletMap
+                  posix={[userLocation.latitude, userLocation.longitude]}
+                />
               ) : (
                 <p>Loading map...</p>
               )}
