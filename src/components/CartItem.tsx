@@ -29,11 +29,15 @@ const CartItem = ({
       {/* Product Image and Details */}
       <div className="flex flex-col md:flex-row items-center space-x-0 md:space-x-4 space-y-4 md:space-y-0">
         {/* Product Image */}
-        <Image
-          src={productImage}
-          alt={productName}
-          className="w-24 h-24 object-cover rounded-lg shadow-md"
-        />
+        <div className="w-24 h-24 relative rounded-lg shadow-md overflow-hidden">
+          <Image
+            src={productImage}
+            alt={productName}
+            layout="fill" // Ensures the image fills the container
+            objectFit="cover" // Ensures the image maintains aspect ratio and fills the space
+            className="rounded-lg" // Ensures the image has rounded corners
+          />
+        </div>
 
         {/* Product Name, Brand, and Remove Button */}
         <div className="text-center md:text-left">

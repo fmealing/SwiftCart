@@ -53,31 +53,32 @@ const Orders = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <h2 className="font-lora text-2xl font-semibold mb-6">My Orders</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Responsive Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {orders.map((order, index) => (
           <div
             key={index}
-            className="p-5 bg-white border rounded-lg shadow-lg flex flex-col space-y-4"
+            className="p-4 sm:p-5 bg-white border rounded-lg shadow-lg flex flex-col space-y-4"
           >
-            <div className="flex items-center space-x-4 p-4">
-              <Image
-                src={order.productImage}
-                alt="Product"
-                width={160}
-                height={160}
-                className="object-contain rounded-lg"
-              />
-              <div className="flex-1">
+            <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+              <div className="w-32 h-32 md:w-40 md:h-40 relative">
+                <Image
+                  src={order.productImage}
+                  alt="Product"
+                  layout="fill" // Let the image fill the container
+                  objectFit="contain" // Ensure the image maintains its aspect ratio within the container
+                  className="rounded-lg"
+                />
+              </div>
+              <div className="flex-1 text-center md:text-left">
                 <p className="font-inter text-lg text-slate-500">Order Total</p>
                 <p className="font-inter font-bold text-lg text-slate-800">
                   {order.total}
                 </p>
                 <p
-                  className={`font-inter text-xl ${getStatusColor(
-                    order.status
-                  )}`}
+                  className={`font-inter text-xl ${getStatusColor(order.status)}`}
                 >
                   {order.status}
                 </p>
@@ -86,8 +87,8 @@ const Orders = () => {
 
             <hr className="border-t-4 border-gray-200" />
 
-            {/* Map Container */}
-            <div className="w-full h-64 rounded-lg">
+            {/* Responsive Map Container */}
+            <div className="w-full h-64 md:h-80 rounded-lg">
               {userLocation ? (
                 <LeafletMap
                   posix={[userLocation.latitude, userLocation.longitude]}

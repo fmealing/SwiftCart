@@ -37,6 +37,9 @@ const About = () => {
         <Image
           src="/images/about-me-illustration.jpg"
           alt="Illustration of me working on a project"
+          width={150}
+          height={60}
+          layout="intrinsic"
           className="mx-auto mt-8 w-full md:w-1/2"
         />
       </div>

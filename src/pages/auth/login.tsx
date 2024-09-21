@@ -50,8 +50,8 @@ const Login = () => {
             <Image
               src="/images/SwiftCart.webp"
               alt="SwiftCart"
-              width={64}
-              height={64}
+              width={128}
+              height={128}
               className="mx-auto filter brightness-0 mb-8"
             />
             <h1 className="font-lora font-semibold text-3xl mb-2">

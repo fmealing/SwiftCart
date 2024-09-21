@@ -51,11 +51,15 @@ const Interests: React.FC<InterestsProps> = ({
               key={interest.name}
               className="w-full h-48 bg-amber-100 rounded-xl flex flex-col justify-between shadow-md hover:shadow-lg transition-shadow p-4"
             >
-              <Image
-                src={interest.image}
-                alt={interest.name}
-                className="w-full h-24 object-cover rounded-lg"
-              />
+              <div className="w-full h-24 relative">
+                <Image
+                  src={interest.image}
+                  alt={interest.name}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-lg"
+                />
+              </div>
               <p className="mt-2 font-semibold text-lg">{interest.name}</p>
             </div>
           ))}
@@ -72,11 +76,15 @@ const Interests: React.FC<InterestsProps> = ({
               }`}
               onClick={() => toggleInterest(interest.name)}
             >
-              <Image
-                src={interest.image}
-                alt={interest.name}
-                className="w-full h-24 object-cover rounded-lg"
-              />
+              <div className="w-full h-24 relative">
+                <Image
+                  src={interest.image}
+                  alt={interest.name}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-lg"
+                />
+              </div>
               <p className="mt-2 font-semibold text-lg">{interest.name}</p>
             </button>
           ))}

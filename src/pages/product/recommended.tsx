@@ -82,6 +82,9 @@ const RecommendedProducts = () => {
                     <Image
                       src={product.image_url}
                       alt={product.name}
+                      width={150}
+                      height={60}
+                      layout="intrinsic"
                       className="w-full h-64 object-cover"
                     />
                     <div className="absolute top-2 left-2 bg-amber-500 text-white text-xs px-2 py-1 rounded-full">

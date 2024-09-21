@@ -76,26 +76,35 @@ const ProductCard = ({ name, price, image, brand }: ProductCardProps) => {
       transition={{ duration: 0.5 }}
       className="relative bg-white p-6 rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105 hover:shadow-2xl"
     >
+      {/* Wishlist button */}
       <button
         onClick={handleAddToWishlist}
-        className="absolute top-8 right-8 text-gray-500 hover:text-red-500 transition duration-300"
+        className="absolute top-8 right-8 text-gray-500 hover:text-red-500 transition duration-300 z-10"
       >
         <FontAwesomeIcon icon={faHeart} size="2xl" />
       </button>
 
-      <Image
-        src={image}
-        alt={name}
-        className="w-full h-64 object-cover mb-4 rounded-lg"
-      />
+      {/* Product Image */}
+      <div className="w-full h-80 mb-4 rounded-lg overflow-hidden relative">
+        <Image
+          src={image}
+          alt={name}
+          layout="fill"
+          objectFit="cover"
+          className="rounded-lg"
+        />
+      </div>
 
-      <div className="flex justify-between items-center mt-4">
-        <div>
-          <h3 className="text-xl font-bold text-gray-800">{name}</h3>
-          <p className="text-gray-600">£{price.toFixed(2)}</p>
-          <p className="text-gray-500">{brand}</p>
-        </div>
+      {/* Product Info */}
+      <div className="mt-4 z-20">
+        {/* Ensures this is visible */}
+        <h3 className="text-xl font-bold text-gray-800">{name}</h3>
+        <p className="text-gray-500">{brand}</p>
+        <p className="text-gray-600 font-semibold">£{price.toFixed(2)}</p>
+      </div>
 
+      {/* Add to Cart Button */}
+      <div className="flex justify-end">
         <button
           onClick={handleAddToCart}
           className="text-amber-500 hover:text-blue-500 transform transition-transform duration-300 hover:scale-125"

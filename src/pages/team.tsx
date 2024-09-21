@@ -36,6 +36,9 @@ const Team = () => {
                 <Image
                   src={member.image}
                   alt={member.name}
+                  width={150}
+                  height={60}
+                  layout="intrinsic"
                   className="w-full h-64 object-cover"
                 />
                 <div className="p-6 text-center">

@@ -78,11 +78,16 @@ const SearchResultsPage = () => {
             className="border rounded-lg shadow-lg p-6 transform transition duration-300 hover:scale-105 hover:shadow-xl bg-white"
           >
             <div className="relative">
-              <Image
-                src={product.image_url}
-                alt={product.name}
-                className="w-full h-64 object-cover rounded-lg mb-4"
-              />
+              <div className="w-full h-64 relative rounded-lg overflow-hidden mb-4">
+                <Image
+                  src={product.image_url}
+                  alt={product.name}
+                  layout="fill" // Ensures the image fills the container
+                  objectFit="cover" // Ensures the image covers the entire container while maintaining aspect ratio
+                  className="rounded-lg"
+                />
+              </div>
+
               <div className="absolute top-2 right-2 bg-amber-500 text-white text-xs px-2 py-1 rounded-full">
                 {product.brand}
               </div>

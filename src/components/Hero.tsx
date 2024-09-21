@@ -44,7 +44,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative hero-background h-screen text-white" id="top">
+    <section className="relative h-screen text-white" id="top">
       {/* Starry Background */}
       <StarryBackground />
 

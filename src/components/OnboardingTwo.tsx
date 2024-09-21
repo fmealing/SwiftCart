@@ -12,6 +12,9 @@ const OnboardingTwo: React.FC<OnboardingTwoProps> = ({ resetForm }) => {
       <Image
         src="/vectors/success.svg"
         alt="Success"
+        width={150}
+        height={60}
+        layout="intrinsic"
         className="absolute inset-0 w-full h-full object-contain opacity-20"
       />
 

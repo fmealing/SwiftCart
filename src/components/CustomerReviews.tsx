@@ -35,6 +35,9 @@ const CustomerReviews: React.FC<CustomerReviewsProps> = ({ reviews }) => (
               <Image
                 src={review.avatar_url || "/default-avatar.jpg"}
                 alt={review.review_name || "Anonymous"}
+                width={150}
+                height={60}
+                layout="intrinsic"
                 className="w-10 h-10 rounded-full"
               />
               <div>

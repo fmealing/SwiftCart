@@ -59,11 +59,18 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
         style={pictureSpring}
         className="text-center p-4 flex flex-col items-center lg:items-start"
       >
-        <Image
-          src={profileImage}
-          alt="Profile"
-          className="w-36 h-36 rounded-full object-cover shadow-lg"
-        />
+        <div className="w-36 h-36 rounded-full overflow-hidden shadow-lg flex items-center justify-center">
+          <Image
+            src={profileImage}
+            alt="Profile"
+            width={150}
+            height={150}
+            layout="intrinsic"
+            objectFit="cover" // Ensures the image covers the container without distortion
+            className="object-center" // Ensures the center of the image is used
+          />
+        </div>
+
         <div className="mt-4 flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-2">
           <label className="px-4 py-2 bg-black text-white rounded-lg cursor-pointer hover:bg-amber-700 transition duration-200">
             Change Picture

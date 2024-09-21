@@ -34,7 +34,7 @@ const StarryBackground: React.FC = () => {
       },
       background: {
         color: {
-          value: "#0d47a1",
+          value: "#020d1d",
         },
       },
       fpsLimit: 120,
@@ -107,6 +107,7 @@ const StarryBackground: React.FC = () => {
         id="tsparticles"
         options={options}
         particlesLoaded={particlesLoaded}
+        className="starry-background"
       />
     );
   }

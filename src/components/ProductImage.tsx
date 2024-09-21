@@ -11,6 +11,9 @@ const ProductImage: React.FC<ProductImageProps> = ({ imageUrl, name }) => (
     <Image
       src={imageUrl || "/placeholder.jpg"}
       alt={name}
+      width={150}
+      height={60}
+      layout="intrinsic"
       className="w-full h-auto object-cover rounded-lg shadow-lg"
     />
   </div>

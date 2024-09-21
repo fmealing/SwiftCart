@@ -12,7 +12,7 @@ import Link from "next/link";
 // Footer component to display social links, site navigation, and copyright information
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-amber-600 text-white py-16">
+    <footer className="bg-amber-600 text-white py-16 footer">
       <div className="container mx-auto px-8">
         {/* Social Media Links */}
         <div className="flex justify-center space-x-10 mb-10">

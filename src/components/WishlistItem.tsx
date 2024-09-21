@@ -36,11 +36,16 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
   return (
     <div className="bg-white shadow-lg rounded-lg p-4 flex flex-col md:flex-row justify-between items-center mb-4">
       <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-        <Image
-          src={productImage}
-          alt={productName}
-          className="w-24 h-24 rounded-full"
-        />
+        <div className="w-24 h-24 relative rounded-full overflow-hidden">
+          <Image
+            src={productImage}
+            alt={productName}
+            layout="fill" // Ensures the image fills the container
+            objectFit="cover" // Ensures the image maintains aspect ratio and fills the space
+            className="rounded-full" // Makes the image circular
+          />
+        </div>
+
         <div className="text-center md:text-left">
           <h3 className="font-lora text-amber-800 font-bold text-xl">
             {productName}

@@ -98,7 +98,7 @@ const Navbar: React.FC<NavbarProps> = () => {
   };
 
   return (
-    <nav className="bg-amber-50 shadow-lg">
+    <nav className="bg-amber-50 shadow-lg navbar">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
@@ -107,7 +107,10 @@ const Navbar: React.FC<NavbarProps> = () => {
               <Image
                 src="/images/SwiftCart.webp"
                 alt="Swift Cart logo"
-                className="h-12 md:h-16 filter brightness-0"
+                width={150} // Set a default width
+                height={60} // Set a default height
+                layout="intrinsic" // This will maintain the aspect ratio and allow Tailwind to style it
+                className="h-12 md:h-16 w-auto filter brightness-0" // Tailwind classes for responsive height
               />
             </Link>
           </div>
